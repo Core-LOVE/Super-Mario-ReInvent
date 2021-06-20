@@ -82,6 +82,10 @@ function Graphics.drawImageWP(img, x, y, sourceX, sourceY, width, height, opacit
 	}
 end
 
+function Graphics.basicDraw(img, x, y, sourceX, sourceY, width, height, opacity, priority, rotation, sceneCoords)
+
+end
+
 do
 	local function sort()
 		table.sort(Graphics.drawingQueue, function(a,b)
@@ -98,11 +102,12 @@ do
 				local y = 0
 				
 				if v.isSceneCoordinates then
-					x = cam.x
-					y = cam.y
+					x = -cam.x
+					y = -cam.y
 				end
 				
-				love.graphics.draw(v.image, v.x - x, v.y - y)
+				love.graphics.draw(v.image, v.x + x, v.y + y, v.rotation)
+				
 				table.remove(Graphics.drawingQueue, k)
 			end
 		end
@@ -111,12 +116,15 @@ do
 	function Graphics.internalDraw()
 		sort()
 		
-		-- for k,v in ipairs(Camera) do
-			-- print(v.isHidden)
-			-- if not v.isHidden then
-				internalDraw()
-			-- end
-		-- end
+		for k,v in ipairs(Camera) do
+			if not v.isHidden then
+				love.graphics.setCanvas(v.canvas)
+				internalDraw(v)
+				love.graphics.setCanvas()
+				
+				love.graphics.draw(v.canvas, v.renderX, v.renderY)
+			end
+		end
 	end
 end
 
