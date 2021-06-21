@@ -2,13 +2,10 @@ rawRequire = require
 
 do
 	local check = function(path)
-		print('...')
-		print(path)
 		local success = pcall(function()
 			return rawRequire(path)
 		end)
 		
-		print(success)
 		if success then
 			return path
 		end

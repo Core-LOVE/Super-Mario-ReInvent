@@ -4,8 +4,10 @@ debug = true
 require 'scripts/base/require'
 require 'objectify'
 require 'print'
-
 inspect = require 'inspect'
+
+--[[loading parsers]]
+ini = require 'parser/ini'
 
 --[[lua stuff]]
 require 'table'
@@ -14,42 +16,23 @@ require 'math'
 --[[engine stuff]]
 require 'color'
 require 'graphics'
+require 'sound'
+-- require 'audio'
 
 --[[level classes]]
 require 'level/camera'
 require 'level/block'
 
-local img = Graphics.loadImage 'graphics/e.png'
-local img2 = Graphics.loadImage 'graphics/b.png'
+Block.spawn(1, 0, 0)
+
+function love.load()
+	for i = 1, 8 do
+		Sound.play(1)
+	end
+end
 
 function love.draw()
-	if love.keyboard.isDown 'right' then
-		camera2.renderX = camera2.renderX + 1
-	end
-	
-	if love.keyboard.isDown 'left' then
-		camera2.renderX = camera2.renderX - 1
-	end
-	
-	Graphics.draw{
-		image = img,
-		priority = -1,
-		isSceneCoords = true
-	}
-	
-	Graphics.draw{
-		image = img,
-		x = 24,
-		priority = 2,
-		isSceneCoords = true
-	}
-	
-	Graphics.draw{
-		image = img2,
-		x = 800,
-		priority = 2,
-		isSceneCoords = true
-	}
+	Block.internalDraw()
 	
 	Graphics.internalDraw()
 end

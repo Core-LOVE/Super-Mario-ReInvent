@@ -16,9 +16,10 @@ function cam.spawn(x,y)
 		x = x,
 		y = y,
 	}
+	v.idx = #cam + 1
 	v.canvas = love.graphics.newCanvas(v.width, v.height)
 	
-	table.insert(cam, v)
+	cam[v.idx] = v
 	return v
 end
 

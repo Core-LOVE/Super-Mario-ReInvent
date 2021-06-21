@@ -31,6 +31,7 @@ _G.Objectify = function(t)
 			v[k] = val
 		end
 		
+		setmetatable(v, {__index = obj})
 		return v
 	end
 	
