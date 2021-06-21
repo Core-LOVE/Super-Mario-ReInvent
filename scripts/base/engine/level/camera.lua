@@ -5,16 +5,16 @@ cam.fields = {
 	y = 0,
 	renderX = 0,
 	renderY = 0,
-	width = 800,
+	width = 400,
 	height = 600,
 	
 	isHidden = false,
 }
 
-function cam.spawn(x,y)
+function cam.spawn(rx,ry)
 	local v = Camera.new{
-		x = x,
-		y = y,
+		renderX = rx,
+		renderY = ry,
 	}
 	v.idx = #cam + 1
 	v.canvas = love.graphics.newCanvas(v.width, v.height)

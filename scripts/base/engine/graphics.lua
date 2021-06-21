@@ -87,22 +87,19 @@ do
 		end)
 	end
 
-	local function internalDraw(cam)
+	local function clear()
+		for k = 1, #drawingQueue do
+			table.remove(drawingQueue, k)
+		end
+	end
+	
+	local function internalDraw()
 		for k = 1, #drawingQueue do
 			local v = drawingQueue[k]
 			
 			if v then
-				local x = 0
-				local y = 0
-				
-				if v.isSceneCoordinates then
-					x = -cam.x
-					y = -cam.y
-				end
-				
-				love.graphics.draw(v.image, v.x + x, v.y + y, v.rotation)
-				
-				table.remove(drawingQueue, k)
+			
+				love.graphics.draw(v.image, v.x, v.y, v.rotation)
 			end
 		end
 	end
@@ -112,13 +109,18 @@ do
 		
 		for k,v in ipairs(Camera) do
 			if not v.isHidden then
-				love.graphics.setCanvas(v.canvas)
-				internalDraw(v)
-				love.graphics.setCanvas()
-				
-				love.graphics.draw(v.canvas, v.renderX, v.renderY)
+				love.graphics.setScissor(v.renderX, v.renderY, v.width, v.height)
+
+				love.graphics.push()
+					love.graphics.translate(-v.x, -v.y)
+					internalDraw()
+				love.graphics.pop()
+
+				love.graphics.setScissor()
 			end
 		end
+		
+		clear()
 	end
 end
 

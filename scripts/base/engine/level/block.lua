@@ -1,5 +1,8 @@
 local block = {}
 
+local frame = {}
+local frametimer = {}
+
 block.fields = {
 	id = 0,
 	
@@ -21,26 +24,28 @@ function block.spawn(id, x, y)
 end
 
 function block:render(arg)
-	local v = self
+	local v = self or {}
 	local arg = arg or {}
 	
 	arg.id = arg.id or v.id
 	arg.x = arg.x or v.x
 	arg.y = arg.y or v.y
+	arg.priority = arg.priority or -5
+	arg.opacity = arg.opacity or 1
+	arg.sceneCoords = arg.sceneCoords or true
 	
 	Graphics.basicDraw(
 		Graphics.sprites.block[arg.id].img,
-		arg.x, arg.y
+		arg.x, arg.y,
+		arg.priority,
+		arg.opacity,
+		arg.sceneCoords
 	)
 end
 
 function block.internalDraw()
-	for k = 1, #block do
-		local v = block[k]
-		
-		if v then
-			v:render()
-		end
+	for k,v in ipairs(block) do
+		v:render()
 	end
 end
 

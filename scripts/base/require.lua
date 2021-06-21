@@ -2,6 +2,10 @@ rawRequire = require
 
 do
 	local check = function(path)
+		print(pcall(function()
+			return rawRequire(path)
+		end))
+		
 		local success = pcall(function()
 			return rawRequire(path)
 		end)
@@ -16,6 +20,12 @@ do
 		assert(name ~= nil,"Module '".. path.. "' not found.")
 		
 		local lib = rawRequire(name)
+		
+		if type(lib) == 'table' then
+			if type(lib.onInitAPI) == 'function' then
+				lib.onInitAPI()
+			end
+		end
 		
 		return lib
 	end
