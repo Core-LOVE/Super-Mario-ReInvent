@@ -50,11 +50,6 @@ end
 function love.draw()
 	EventManager.callEvent("onDraw")
 	Block.internalDraw()
-	
-	for i = 1, 24 do
-		Block.render{id = i, x = 32 * i}
-	end
-	
 	EventManager.callEvent("onDrawEnd")
 	
 	Graphics.internalDraw()

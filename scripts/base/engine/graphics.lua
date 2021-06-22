@@ -93,13 +93,24 @@ do
 		end
 	end
 	
-	local function internalDraw()
-		for k = 1, #drawingQueue do
-			local v = drawingQueue[k]
-			
-			if v then
-			
-				love.graphics.draw(v.image, v.x, v.y, v.rotation)
+	local function canvas(v, c)
+		local x, y = 0, 0
+		if v.isSceneCoordinates then
+			x = -c.x
+			y = -c.y
+		end
+	
+		love.graphics.draw(v.image, v.x + x, v.y + y, v.rotation)
+	end
+	
+	local function internalDraw(v)
+		for i,c in ipairs(Camera) do
+			if not c.isHidden then
+				love.graphics.setCanvas(c.canvas)
+				canvas(v, c)
+				love.graphics.setCanvas()
+				
+				love.graphics.draw(c.canvas, v.renderX, v.renderY)
 			end
 		end
 	end
@@ -107,20 +118,15 @@ do
 	function Graphics.internalDraw()
 		sort()
 		
-		for k,v in ipairs(Camera) do
-			if not v.isHidden then
-				love.graphics.setScissor(v.renderX, v.renderY, v.width, v.height)
-
-				love.graphics.push()
-					love.graphics.translate(-v.x, -v.y)
-					internalDraw()
-				love.graphics.pop()
-
-				love.graphics.setScissor()
+		for k = 1, #drawingQueue do
+			local v = drawingQueue[k]
+			
+			if v then
+				internalDraw(v)
+				
+				table.remove(drawingQueue, k)
 			end
 		end
-		
-		clear()
 	end
 end
 
@@ -135,7 +141,6 @@ for k,v in pairs(Graphics.sprites) do
 		self[key] = {}
 		self[key].img = img
 
-		print(self)
 		return rawget(self, key)
 	end})
 end
