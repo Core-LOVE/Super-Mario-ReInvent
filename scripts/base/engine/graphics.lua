@@ -81,18 +81,6 @@ function Graphics.basicDraw(...)
 end
 
 do
-	local function sort()
-		table.sort(drawingQueue, function(a,b)
-			return (a.priority < b.priority)
-		end)
-	end
-
-	local function clear()
-		for k = 1, #drawingQueue do
-			table.remove(drawingQueue, k)
-		end
-	end
-	
 	local function canvas(v, c)
 		local x, y = 0, 0
 		if v.isSceneCoordinates then
@@ -110,13 +98,15 @@ do
 				canvas(v, c)
 				love.graphics.setCanvas()
 				
-				love.graphics.draw(c.canvas, v.renderX, v.renderY)
+				love.graphics.draw(c.canvas, c.renderX, c.renderY)
 			end
 		end
 	end
-
+	
 	function Graphics.internalDraw()
-		sort()
+		table.sort(drawingQueue, function(a,b)
+			return (a.priority < b.priority)
+		end)
 		
 		for k = 1, #drawingQueue do
 			local v = drawingQueue[k]

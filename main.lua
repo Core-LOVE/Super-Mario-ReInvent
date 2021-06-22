@@ -26,15 +26,16 @@ require 'eventManager'
 require 'level/camera'
 require 'level/block'
 
-Block.spawn(1, 0, 0)
-Block.spawn(2, 32, 0)
-Block.spawn(3, 64, 0)
+for i = 0, 16 do
+	Block.spawn(1, i * 32, i * 32)
+end
 
 -- function love.load()
 	-- for i = 1, 8 do
 		-- Sound.play(1)
 	-- end
 -- end
+
 
 function love.update()
 	if love.keyboard.isDown 'left' then
