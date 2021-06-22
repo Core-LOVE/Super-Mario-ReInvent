@@ -81,14 +81,18 @@ function Graphics.basicDraw(...)
 end
 
 do
+	local function draw(v, x, y)
+		love.graphics.draw(v.image, v.x + (x or 0), v.y + (y or 0), v.rotation)
+	end
+	
 	local function canvas(v, c)
 		local x, y = 0, 0
 		if v.isSceneCoordinates then
 			x = -c.x
 			y = -c.y
 		end
-	
-		love.graphics.draw(v.image, v.x + x, v.y + y, v.rotation)
+		
+		draw(v, x, y)
 	end
 	
 	local function internalDraw(v)
@@ -112,7 +116,11 @@ do
 			local v = drawingQueue[k]
 			
 			if v then
-				internalDraw(v)
+				if v.isSceneCoordinates then
+					internalDraw(v)
+				else
+					draw(v)
+				end
 				
 				table.remove(drawingQueue, k)
 			end
@@ -134,5 +142,37 @@ for k,v in pairs(Graphics.sprites) do
 		return rawget(self, key)
 	end})
 end
+
+RENDER_PRIORITY = {
+	LEVEL_BG = -100,
+	
+	FAR_BGO = -95,
+	BGO = -85,
+	SPECIAL_BGO = -80,
+	FOREGROUND_BGO = -20,
+	
+	SIZEABLE = -90,
+	FOREGROUND_BLOCK = -10,
+	BLOCK = -65,
+	
+	BG_NPC = -75,
+	FROZEN_NPC = -50,
+	NPC = -45,
+	HELD_NPC = -30,
+	FOREGROUND_NPC = -15,
+	SPECIAL_NPC = -55,
+	
+	WARPING_PLAYER = -70,
+	CLOWN_CAR = -35,
+	PLAYER = -25,
+	
+	BG_EFFECT = -60,
+	FOREGROUND_EFFECT = -5,
+	
+	DEFAULT = 1,
+	TEXT = 3,
+	MESSAGE_ICON = -40,
+	HUD = 5,
+}
 
 _G.Graphics = Graphics

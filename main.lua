@@ -14,6 +14,7 @@ require 'table'
 require 'math'
 
 --[[engine stuff]]
+require 'game'
 require 'color'
 require 'graphics'
 require 'sound'
@@ -46,6 +47,8 @@ function love.update()
 	
 	EventManager.callEvent("onTick")
 	EventManager.callEvent("onTickEnd")
+	
+	print(love.timer.getFPS( ))
 end
 
 function love.draw()

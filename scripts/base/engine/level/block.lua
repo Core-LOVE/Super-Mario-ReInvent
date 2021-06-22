@@ -30,7 +30,7 @@ function block:render(arg)
 	arg.id = arg.id or v.id
 	arg.x = arg.x or v.x
 	arg.y = arg.y or v.y
-	arg.priority = arg.priority or -5
+	arg.priority = arg.priority or RENDER_PRIORITY.BLOCK
 	arg.opacity = arg.opacity or 1
 	arg.sceneCoords = arg.sceneCoords or true
 	
