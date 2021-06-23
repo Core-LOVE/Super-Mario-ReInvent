@@ -41,7 +41,7 @@ levelParser.load('tl/a couple blocks.lvlx')
 -- end
 
 function love.load()
-
+	Camera.type = 2
 end
 
 function love.update()
@@ -61,6 +61,7 @@ function love.update()
 		Player.spawn(1, camera.x + 100, camera.y + 100)
 	end
 	
+	Camera.update()
 	EventManager.callEvent("onTick")
 	EventManager.callEvent("onTickEnd")
 end
