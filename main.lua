@@ -8,6 +8,7 @@ inspect = require 'inspect'
 
 --[[loading parsers]]
 ini = require 'parser/ini'
+levelParser = require 'parser/levelParser'
 
 --[[lua stuff]]
 require 'table'
@@ -15,6 +16,7 @@ require 'math'
 
 --[[engine stuff]]
 require 'game'
+require 'keys'
 require 'color'
 require 'graphics'
 require 'sound'
@@ -26,10 +28,11 @@ require 'eventManager'
 --[[level classes]]
 require 'level/camera'
 require 'level/block'
+require 'level/bgo'
+require 'level/section'
+require 'level/player'
 
-for i = 0, 16 do
-	Block.spawn(1, i * 32, i * 32)
-end
+levelParser.load('tl/a couple blocks.lvlx')
 
 -- function love.load()
 	-- for i = 1, 8 do
@@ -37,23 +40,35 @@ end
 	-- end
 -- end
 
+function love.load()
+
+end
 
 function love.update()
-	if love.keyboard.isDown 'left' then
-		camera.x = camera.x - 1
-	elseif love.keyboard.isDown 'right' then
-		camera.x = camera.x + 1
+	if Keys.isDown 'left' then
+		camera.x = camera.x - 16
+	elseif Keys.isDown 'right' then
+		camera.x = camera.x + 16
+	end
+	
+	if Keys.isDown 'up' then
+		camera.y = camera.y - 16
+	elseif Keys.isDown 'down' then
+		camera.y = camera.y + 16
+	end
+	
+	if Keys.isDown 'jump' then
+		Player.spawn(1, camera.x + 100, camera.y + 100)
 	end
 	
 	EventManager.callEvent("onTick")
 	EventManager.callEvent("onTickEnd")
-	
-	print(love.timer.getFPS( ))
 end
 
 function love.draw()
 	EventManager.callEvent("onDraw")
 	Block.internalDraw()
+	Player.internalDraw()
 	EventManager.callEvent("onDrawEnd")
 	
 	Graphics.internalDraw()

@@ -1,13 +1,17 @@
 local bgo = {}
 
-bgo.fields = {
-	id = 0,
-	
-	x = 0,
-	y = 0,
-	width = 32,
-	height = 32,
-}
+bgo.fields = function()
+	return {
+		id = 0,
+		
+		x = 0,
+		y = 0,
+		width = 32,
+		height = 32,
+		
+		zOffset = 0,
+	}
+end
 
 function bgo.spawn(id, x, y)
 	local v = bgo.new{
@@ -16,6 +20,7 @@ function bgo.spawn(id, x, y)
 		x = x,
 		y = y,
 	}
+	v.idx = #bgo + 1
 	
 	bgo[#bgo + 1] = v
 	return v
@@ -31,14 +36,16 @@ function bgo:render(arg)
 	arg.priority = arg.priority or RENDER_PRIORITY.BGO
 	arg.opacity = arg.opacity or 1
 	arg.sceneCoords = arg.sceneCoords or true
-	
-	Graphics.basicDraw(
-		Graphics.sprites.background[arg.id].img,
-		arg.x, arg.y,
-		arg.priority,
-		arg.opacity,
-		arg.sceneCoords
-	)
+
+	if #Camera.getIntersecting(arg.x, arg.y, arg.x + v.width, arg.y + v.height) ~= 0 then
+		Graphics.basicDraw(
+			Graphics.sprites.background[arg.id].img,
+			arg.x, arg.y,
+			arg.priority,
+			arg.opacity,
+			arg.sceneCoords
+		)
+	end
 end	
 
-_G.BGO = bgo
+_G.BGO = Objectify(bgo)

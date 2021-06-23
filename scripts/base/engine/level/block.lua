@@ -3,14 +3,20 @@ local block = {}
 local frame = {}
 local frametimer = {}
 
-block.fields = {
-	id = 0,
-	
-	x = 0,
-	y = 0,
-	width = 32,
-	height = 32,
-}
+block.fields = function()
+	return {
+		id = 0,
+		
+		x = 0,
+		y = 0,
+		width = 32,
+		height = 32,
+		
+		contentID = 0,
+		hiddenUntilHit = false,
+		slippery = false,
+	}
+end
 
 function block.spawn(id, x, y)
 	local v = block.new{
@@ -21,6 +27,7 @@ function block.spawn(id, x, y)
 	v.idx = #block + 1
 	
 	block[v.idx] = v
+	return v
 end
 
 function block:render(arg)
@@ -34,13 +41,13 @@ function block:render(arg)
 	arg.opacity = arg.opacity or 1
 	arg.sceneCoords = arg.sceneCoords or true
 	
-	Graphics.basicDraw(
-		Graphics.sprites.block[arg.id].img,
-		arg.x, arg.y,
-		arg.priority,
-		arg.opacity,
-		arg.sceneCoords
-	)
+		Graphics.basicDraw(
+			Graphics.sprites.block[arg.id].img,
+			arg.x, arg.y,
+			arg.priority,
+			arg.opacity,
+			arg.sceneCoords
+		)
 end
 
 function block.internalDraw()

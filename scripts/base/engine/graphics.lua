@@ -11,20 +11,25 @@ function Graphics.loadImage(path)
 	return img
 end
 
-RTYPE_TEXT = "text"
-RTYPE_IMAGE = "image"
-
+-- function Graphics
 function Graphics.draw(arg)
 	local arg = arg or {}
 	
 	arg.x = arg.x or 0
 	arg.y = arg.y or 0
-	arg.type = arg.type or RTYPE_IMAGE
 	arg.isSceneCoordinates = arg.isSceneCoordinates or false
 	arg.priority = arg.priority or 1
 	arg.rotation = arg.rotation or 0
 	arg.opacity = arg.opacity or 1
 	arg.color = arg.color
+	arg.sourceX = arg.sourceX or 0
+	arg.sourceY = arg.sourceY or 0
+	arg.sourceWidth = arg.sourceWidth or 0
+	arg.sourceHeight = arg.sourceHeight or 0
+	
+	if arg.sourceHeight ~= 0 or arg.sourceWidth ~= 0 then
+		arg.quad = love.graphics.newQuad(arg.sourceX, arg.sourceY, arg.sourceWidth, arg.sourceHeight, arg.image:getDimensions())
+	end
 	
 	table.insert(drawingQueue, arg)
 	return arg
@@ -81,8 +86,22 @@ function Graphics.basicDraw(...)
 end
 
 do
+	local function clear()
+		for k = 1, #drawingQueue do
+			local v = drawingQueue[k]
+			
+			if v then
+				table.remove(drawingQueue, k)
+			end
+		end
+	end
+	
 	local function draw(v, x, y)
-		love.graphics.draw(v.image, v.x + (x or 0), v.y + (y or 0), v.rotation)
+		if not v.quad then
+			love.graphics.draw(v.image, v.x + (x or 0), v.y + (y or 0), v.rotation)
+		else
+			love.graphics.draw(v.image, v.quad, v.x + (x or 0), v.y + (y or 0), v.rotation)	
+		end
 	end
 	
 	local function canvas(v, c)
@@ -99,12 +118,23 @@ do
 		for i,c in ipairs(Camera) do
 			if not c.isHidden then
 				love.graphics.setCanvas(c.canvas)
-				canvas(v, c)
+				love.graphics.clear()
+				
+				for k = 1, #drawingQueue do
+					local v = drawingQueue[k]
+					
+					if v then
+						canvas(v, c)
+					end
+				end
+				
 				love.graphics.setCanvas()
 				
 				love.graphics.draw(c.canvas, c.renderX, c.renderY)
 			end
 		end
+		
+		clear()
 	end
 	
 	function Graphics.internalDraw()
@@ -112,24 +142,13 @@ do
 			return (a.priority < b.priority)
 		end)
 		
-		for k = 1, #drawingQueue do
-			local v = drawingQueue[k]
-			
-			if v then
-				if v.isSceneCoordinates then
-					internalDraw(v)
-				else
-					draw(v)
-				end
-				
-				table.remove(drawingQueue, k)
-			end
-		end
+		internalDraw()
 	end
 end
 
 Graphics.sprites = {
-	block = {}
+	block = {},
+	mario = {}
 }
 
 for k,v in pairs(Graphics.sprites) do

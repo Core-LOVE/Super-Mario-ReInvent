@@ -16,16 +16,13 @@ end
 
 _G.Objectify = function(t)
 	local obj = t or {}
-
+	
 	function obj.new(arg)
 		local fields = {}
-		
-		if t.fields then
-			for k,v in pairs(t.fields) do
-				fields[k] = v
-			end
+		if type(t.fields) == 'function' then
+			fields = t.fields()
 		end
-	
+		
 		local v = fields
 		
 		for k,val in pairs(arg) do
