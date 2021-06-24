@@ -31,6 +31,7 @@ require 'level/camera'
 require 'level/block'
 require 'level/bgo'
 require 'level/section'
+require 'level/playerSettings'
 require 'level/player'
 require 'level/levelHud'
 

@@ -1,5 +1,4 @@
 local plr = {}
-local config = require 'level/player_config'
 
 CHARACTERS = {
 	'mario',
@@ -78,6 +77,10 @@ local function pfrY(plrFrame)
 	return A * 100
 end
 
+function plr:getName()
+	return CHARACTERS[self.character]
+end
+
 function plr:render(arg)
 	local v = self or {}
 	local arg = arg or {}
@@ -92,9 +95,11 @@ function plr:render(arg)
 	arg.sceneCoords = arg.sceneCoords or true
 	arg.frame = arg.frame or v.frame
 	
-	local fx = config[CHARACTERS[arg.character]]['FrameX'][(arg.powerup * 100) + (arg.frame * arg.direction)]
-	local fy = config[CHARACTERS[arg.character]]['FrameY'][(arg.powerup * 100) + (arg.frame * arg.direction)]
+	local settings = PlayerSettings.load(CHARACTERS[arg.character])
 	
+	local fx = settings['FrameX'][(arg.powerup * 100) + (arg.frame * arg.direction)]
+	local fy = settings['FrameY'][(arg.powerup * 100) + (arg.frame * arg.direction)]
+
 	Graphics.draw{
 		image = Graphics.sprites[CHARACTERS[arg.character]][arg.powerup].img,
 		x = arg.x + fx,
@@ -114,6 +119,10 @@ function plr.spawn(char, x, y)
 		x = x,
 		y = y,
 	}
+	
+	local settings = PlayerSettings.load(v:getName())
+	v.width = settings[v.powerup].width
+	v.height = settings[v.powerup].height
 	
 	plr[#plr + 1] = v
 	return v
