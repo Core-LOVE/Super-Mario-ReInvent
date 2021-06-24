@@ -11,3 +11,7 @@ Game.isColliding = function(a,b)
    else return true
 	   end
 end
+
+Game.score = 0
+Game.coins = 0
+Game.lives = 3

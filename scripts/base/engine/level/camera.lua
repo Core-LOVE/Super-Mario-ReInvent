@@ -2,7 +2,6 @@ local cam = {}
 
 cam.type = 0
 cam.isSplit = (cam.type > 0)
-local old_type = cam.type
 
 cam.fields = function()
 	return {
@@ -49,6 +48,19 @@ function cam.getIntersecting(x, y, w, h)
 	return ret
 end
 
+local function firstCamera()
+	local p = Player[1]
+	local v = camera
+	
+	v.x = (p.x - (v.width * 0.5)) + (p.width * 0.5) * 2
+	v.y = (p.y - (v.height * 0.5)) + (p.height * 0.5) * 2
+	
+	-- local s = Section[p.section].boundary
+
+	-- v.x = math.clamp(v.x, s.left, s.right)
+	-- v.y = math.clamp(v.y, s.top, s.bottom)
+end
+
 function cam.update()
 	local c1 = camera
 	local c2 = camera2
@@ -79,14 +91,17 @@ function cam.update()
 		c2.isHidden = false
 	end
 	
-	if old_type ~= cam.type then
-		c1.canvas = love.graphics.newCanvas(c1.width, c1.height)
-		c2.canvas = love.graphics.newCanvas(c2.width, c2.height)
+	for k,v in ipairs(cam) do
+		local c = v.canvas
 		
-		old_type = cam.type
+		if c:getWidth() ~= v.width or c:getHeight() ~= v.height then
+			v.canvas = love.graphics.newCanvas(v.width, v.height)
+		end
 	end
 	
 	cam.isSplit = (cam.type > 0)
+	
+	firstCamera()
 end
 
 _G.Camera = Objectify(cam)

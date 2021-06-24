@@ -32,7 +32,22 @@ function section.spawn(ID, bound, musID, musPath, bgID)
 	}
 	v.idx = ID
 	
+	section[ID] = v
 	return v
+end
+
+function section.getIntersecting(x1,y1,x2,y2)
+	local ret = {}
+	
+	for _,v in ipairs(section) do
+		local b = v.boundary
+		
+		if b.left <= x2 and b.top <= y2 and b.right >= x1 and b.bottom >= y1 then
+			ret[#ret + 1] = v
+		end
+	end
+
+	return ret
 end
 
 _G.Section = Objectify(section)

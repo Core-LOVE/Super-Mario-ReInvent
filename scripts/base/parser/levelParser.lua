@@ -115,15 +115,14 @@ do
     
     types.STARTPOINT.spawn = (function(properties)
         -- TODO: make this create a start point rather than a player
-        -- if #Player > 0 then return end
+        if #Player > 0 then return end
 
-		-- local v = Player.spawn(1, properties.X, properties.Y)
-		-- v.direction = properties.D
+		local v = Player.spawn(1, properties.X, properties.Y)
+		v.direction = properties.D
 		
-		camera.x = properties.X
-		camera.y = properties.Y - 200
-		camera2.x = camera.x
-		camera2.y = camera.y
+		for k,_ in ipairs(Section.getIntersecting(v.x, v.y, v.x + v.width, v.y + v.height)) do
+			v.section = k
+		end
     end)
     
     -- types.PHYSICS.spawn = (function(properties)

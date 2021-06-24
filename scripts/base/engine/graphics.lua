@@ -11,7 +11,25 @@ function Graphics.loadImage(path)
 	return img
 end
 
--- function Graphics
+function Graphics.rect(arg)
+	local arg = arg or {}
+	
+	arg.x = arg.x or 0
+	arg.y = arg.y or 0
+	arg.width = arg.width or 32
+	arg.height = arg.height or 32
+	arg.opacity = arg.opacity or 1
+	arg.color = arg.color
+	arg.form = 'rect'
+	arg.mode = arg.mode or 'fill'
+	
+	arg.isSceneCoordinates = arg.isSceneCoordinates or false
+	arg.priority = arg.priority or 1
+	
+	table.insert(drawingQueue, arg)
+	return arg
+end
+
 function Graphics.draw(arg)
 	local arg = arg or {}
 	
@@ -97,11 +115,25 @@ do
 	end
 	
 	local function draw(v, x, y)
-		if not v.quad then
-			love.graphics.draw(v.image, v.x + (x or 0), v.y + (y or 0), v.rotation)
-		else
-			love.graphics.draw(v.image, v.quad, v.x + (x or 0), v.y + (y or 0), v.rotation)	
+		col = v.color
+		if not col then
+			col = Color.white .. v.opacity
 		end
+		
+		love.graphics.setColor(col)
+		
+		if not v.form then
+			if not v.quad then
+				love.graphics.draw(v.image, v.x + (x or 0), v.y + (y or 0), v.rotation)
+			else
+				love.graphics.draw(v.image, v.quad, v.x + (x or 0), v.y + (y or 0), v.rotation)	
+			end
+		else
+			if v.form == "rect" then
+				love.graphics.rectangle(v.mode, v.x + .5, v.y + .5, v.width, v.height)
+			end
+		end
+		love.graphics.setColor(Color.white)
 	end
 	
 	local function canvas(v, c)
@@ -148,17 +180,27 @@ end
 
 Graphics.sprites = {
 	block = {},
-	mario = {}
+	mario = {},
+	ui = {},
 }
 
 for k,v in pairs(Graphics.sprites) do
 	setmetatable(v, {__index = function(self, key)
-		local img = Graphics.loadImage('graphics/' .. k .. '/' .. k .. '-' .. key .. '.png')
-		
-		self[key] = {}
-		self[key].img = img
+		if k ~= 'ui' then
+			local img = Graphics.loadImage('graphics/' .. k .. '/' .. k .. '-' .. key .. '.png')
+			
+			self[key] = {}
+			self[key].img = img
 
-		return rawget(self, key)
+			return rawget(self, key)
+		else
+			local img = Graphics.loadImage('graphics/' .. k .. '/' .. key .. '.png')
+			
+			self[key] = {}
+			self[key].img = img
+
+			return rawget(self, key)
+		end
 	end})
 end
 

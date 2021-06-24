@@ -20,6 +20,7 @@ require 'keys'
 require 'color'
 require 'graphics'
 require 'sound'
+require 'text'
 -- require 'audio'
 
 --[[eventmanager and etc]]
@@ -31,6 +32,7 @@ require 'level/block'
 require 'level/bgo'
 require 'level/section'
 require 'level/player'
+require 'level/levelHud'
 
 levelParser.load('tl/a couple blocks.lvlx')
 
@@ -41,7 +43,7 @@ levelParser.load('tl/a couple blocks.lvlx')
 -- end
 
 function love.load()
-	Camera.type = 2
+	Camera.type = 0
 end
 
 function love.update()
@@ -57,10 +59,6 @@ function love.update()
 		camera.y = camera.y + 16
 	end
 	
-	if Keys.isDown 'jump' then
-		Player.spawn(1, camera.x + 100, camera.y + 100)
-	end
-	
 	Camera.update()
 	EventManager.callEvent("onTick")
 	EventManager.callEvent("onTickEnd")
@@ -70,6 +68,7 @@ function love.draw()
 	EventManager.callEvent("onDraw")
 	Block.internalDraw()
 	Player.internalDraw()
+	LevelHUD.internalDraw()
 	EventManager.callEvent("onDrawEnd")
 	
 	Graphics.internalDraw()

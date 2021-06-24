@@ -20,6 +20,8 @@ plr.fields = function()
 		direction = 1,
 		
 		frame = 1,
+		
+		section = 0,
 	}
 end
 
