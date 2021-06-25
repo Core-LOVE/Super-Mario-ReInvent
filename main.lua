@@ -25,6 +25,7 @@ require 'text'
 
 --[[eventmanager and etc]]
 require 'eventManager'
+playerManager = require 'manager/playerManager'
 
 --[[level classes]]
 require 'level/camera'
@@ -60,8 +61,9 @@ function love.update()
 		camera.y = camera.y + 16
 	end
 	
-	Camera.update()
 	EventManager.callEvent("onTick")
+	Camera.update()
+	EventManager.callEvent("onCameraUpdate")
 	EventManager.callEvent("onTickEnd")
 end
 
@@ -73,4 +75,6 @@ function love.draw()
 	EventManager.callEvent("onDrawEnd")
 	
 	Graphics.internalDraw()
+	
+	EventManager.callEvent("onCameraDraw")
 end

@@ -1,5 +1,19 @@
 local plr = {}
 
+plr.script = {}
+
+for i = 1, 1 do
+	CHARACTER = i
+	
+	plr.script[i] = require('character/character-' .. i)
+	
+	CHARACTER = nil
+end
+
+-- for i = 1, 1 do
+	-- powerupManager.register('character/powerup/powerup-' .. i, i)
+-- end
+
 CHARACTERS = {
 	'mario',
 	'luigi',

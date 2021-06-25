@@ -2,10 +2,6 @@ rawRequire = require
 
 do
 	local check = function(path)
-		print(pcall(function()
-			return rawRequire(path)
-		end))
-		
 		local success = pcall(function()
 			return rawRequire(path)
 		end)

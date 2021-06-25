@@ -3477,3 +3477,65 @@ Warning: LoadConfig -> LEVEL-99 image file is not exist: D:/MyGames/Super Mario 
 Warning: LoadConfig -> image file is not exist: D:/MyGames/Super Mario ReInvent/graphics/level/level-100.gif
 Warning: LoadConfig -> LEVEL-100 image file is not exist: D:/MyGames/Super Mario ReInvent/graphics/level/level-100.gif
 Warning: LoadConfig -> Not all Level images loaded! Total: 100, Loaded: 0
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): QPixmap::scaleHeight: Pixmap is a null pixmap
+Warning: (:0, ): Failed to initialize LunaLua capabilities!
+Warning: (:0, ): libpng warning: IDAT: Extra compressed data
+Warning: (:0, ): libpng warning: iCCP: known incorrect sRGB profile
+Warning: (:0, ): libpng warning: iCCP: cHRM chunk does not match sRGB

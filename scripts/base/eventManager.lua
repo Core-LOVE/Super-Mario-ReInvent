@@ -3,6 +3,8 @@ local EventManager = {}
 EventManager.eventsList = {
     "onTick","onTickEnd",
     "onDraw","onDrawEnd",
+	"onCameraUpdate",
+	"onCameraDraw",
 	
     "onNPCHarm","onPostNPCHarm",
     "onNPCKill","onPostNPCKill",
