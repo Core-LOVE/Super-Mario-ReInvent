@@ -85,29 +85,29 @@ do
 		v.zOffset = properties.ZO or 0
 	end)
 	
-	-- types.NPC.spawn = (function(properties)
-        -- local v = NPC.spawn(properties.ID, properties.X, properties.Y)
+	types.NPC.spawn = (function(properties)
+        local v = NPC.spawn(properties.ID, properties.X, properties.Y)
         
-        -- v.despawnTimer = 2
+        v.despawnTimer = 2
 		
-		-- v.direction = properties.D or 0
-		-- v.spawnDirection = properties.D or 0
-		-- if v.direction == 0 then
-			-- local t = {
-			-- [1] = -1,
-			-- [2] = 1
-			-- }
-			-- v.direction = t[math.floor(math.random(1,2))]
-		-- end
+		v.direction = properties.D or 0
+		v.spawnDirection = properties.D or 0
+		if v.direction == 0 then
+			local t = {
+			[1] = -1,
+			[2] = 1
+			}
+			v.direction = t[math.floor(math.random(1,2))]
+		end
         
-        -- v.legacyBoss = properties.BS or false
-        -- v.dontMove = properties.NM or false
-        -- v.friendly = properties.FD or false
-		-- v.spawnAi1 = properties.S1 or 0
-		-- v.spawnAi2 = properties.S2 or 0
+        v.legacyBoss = properties.BS or false
+        v.dontMove = properties.NM or false
+        v.friendly = properties.FD or false
+		v.spawnAi1 = properties.S1 or 0
+		v.spawnAi2 = properties.S2 or 0
 		
 		-- v.msg = properties.MG or ""
-	-- end)
+	end)
 	
 	-- types.LAYERS.spawn = (function(properties)
 		-- local v = Layer.create(properties.LR, properties.HD or false)
@@ -115,8 +115,6 @@ do
     
     types.STARTPOINT.spawn = (function(properties)
         -- TODO: make this create a start point rather than a player
-        if #Player > 0 then return end
-
 		local v = Player.spawn(1, properties.X, properties.Y)
 		v.direction = properties.D
 		

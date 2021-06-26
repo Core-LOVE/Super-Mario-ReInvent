@@ -30,6 +30,7 @@ playerManager = require 'manager/playerManager'
 --[[level classes]]
 require 'level/camera'
 require 'level/block'
+require 'level/npc'
 require 'level/bgo'
 require 'level/section'
 require 'level/playerSettings'
@@ -49,17 +50,8 @@ function love.load()
 end
 
 function love.update()
-	if Keys.isDown 'left' then
-		camera.x = camera.x - 16
-	elseif Keys.isDown 'right' then
-		camera.x = camera.x + 16
-	end
-	
-	if Keys.isDown 'up' then
-		camera.y = camera.y - 16
-	elseif Keys.isDown 'down' then
-		camera.y = camera.y + 16
-	end
+	camera2.x = camera.x
+	camera2.y = camera.y
 	
 	EventManager.callEvent("onTick")
 	Camera.update()
@@ -69,9 +61,12 @@ end
 
 function love.draw()
 	EventManager.callEvent("onDraw")
+	
 	Block.internalDraw()
+	NPC.internalDraw()
 	Player.internalDraw()
 	LevelHUD.internalDraw()
+
 	EventManager.callEvent("onDrawEnd")
 	
 	Graphics.internalDraw()

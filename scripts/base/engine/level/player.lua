@@ -23,6 +23,7 @@ plr.fields = function()
 	return {
 		character = 1,
 		powerup = 1,
+		reservePowerup = 9,
 		
 		x = 0,
 		y = 0,
@@ -35,6 +36,8 @@ plr.fields = function()
 		frame = 1,
 		
 		section = 0,
+		lives = 3,
+		livesEnabled = false,
 	}
 end
 

@@ -11,20 +11,24 @@ function Graphics.loadImage(path)
 	return img
 end
 
+local function defaultArg(arg)
+	arg.x = arg.x or 0
+	arg.y = arg.y or 0
+	arg.isSceneCoordinates = arg.isSceneCoordinates or false
+	arg.priority = arg.priority or 1
+	arg.camera = arg.camera or 0
+end
+
 function Graphics.rect(arg)
 	local arg = arg or {}
 	
-	arg.x = arg.x or 0
-	arg.y = arg.y or 0
+	defaultArg(arg)
 	arg.width = arg.width or 32
 	arg.height = arg.height or 32
 	arg.opacity = arg.opacity or 1
 	arg.color = arg.color
 	arg.form = 'rect'
 	arg.mode = arg.mode or 'fill'
-	
-	arg.isSceneCoordinates = arg.isSceneCoordinates or false
-	arg.priority = arg.priority or 1
 	
 	table.insert(drawingQueue, arg)
 	return arg
@@ -33,10 +37,7 @@ end
 function Graphics.draw(arg)
 	local arg = arg or {}
 	
-	arg.x = arg.x or 0
-	arg.y = arg.y or 0
-	arg.isSceneCoordinates = arg.isSceneCoordinates or false
-	arg.priority = arg.priority or 1
+	defaultArg(arg)
 	arg.rotation = arg.rotation or 0
 	arg.opacity = arg.opacity or 1
 	arg.color = arg.color
@@ -146,23 +147,43 @@ do
 		draw(v, x, y)
 	end
 	
-	local function internalDraw(v)
-		for i,c in ipairs(Camera) do
+	local function internalDraw2(v)
+		if v.camera == 0 then
+			for _,c in ipairs(Camera) do
+				if not c.isHidden then
+					love.graphics.setCanvas(c.canvas)
+					love.graphics.clear()
+					
+					canvas(v, c)
+					
+					love.graphics.setCanvas()
+					
+					love.graphics.draw(c.canvas, c.renderX, c.renderY)					
+				end						
+			end
+		elseif v.camera > 0 then
+			local c = Camera[v.camera]
+			
 			if not c.isHidden then
 				love.graphics.setCanvas(c.canvas)
 				love.graphics.clear()
-				
-				for k = 1, #drawingQueue do
-					local v = drawingQueue[k]
 					
-					if v then
-						canvas(v, c)
-					end
-				end
-				
+				canvas(v, c)
+					
 				love.graphics.setCanvas()
-				
-				love.graphics.draw(c.canvas, c.renderX, c.renderY)
+				love.graphics.draw(c.canvas, c.renderX, c.renderY)					
+			end	
+		elseif v.camera == -1 then
+			canvas(v)
+		end
+	end
+	
+	local function internalDraw()
+		for k = 1, #drawingQueue do
+			local v = drawingQueue[k]
+					
+			if v then
+				internalDraw2(v)
 			end
 		end
 		
@@ -180,6 +201,7 @@ end
 
 Graphics.sprites = {
 	block = {},
+	npc = {},
 	mario = {},
 	ui = {},
 }

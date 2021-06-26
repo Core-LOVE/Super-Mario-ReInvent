@@ -20,6 +20,11 @@ hud.livecount = {
 		return Game.lives
 	end
 }
+hud.hearts = {
+	x = 0,
+	y = 0,
+	priority = RENDER_PRIORITY.HUD,
+}
 hud.coincount = {
 	x = 0,
 	y = 0,
@@ -67,6 +72,9 @@ local function draw_liveCount()
 		image = i.image
 	}
 	local x = 166
+	if #Player > 1 and not Camera.isSplit then
+		x = x + 40
+	end
 	
 	t.x = t.x + (camera.width / 2) - x
 	t.y = t.y + 26
@@ -88,6 +96,9 @@ local function draw_coinCount()
 		image = i.image
 	}
 	local x = 88
+	if #Player > 1 and not Camera.isSplit then
+		x = x + 40
+	end
 	
 	t.x = t.x + (camera.width / 2) + x
 	t.y = t.y + 26
@@ -117,6 +128,9 @@ local function draw_scoreCount()
 	}
 	
 	local x = 88
+	if #Player > 1 and not Camera.isSplit then
+		x = x + 40
+	end
 	
 	t.x = t.x + (camera.width / 2) + x
 	t.y = t.y + 47
@@ -124,6 +138,41 @@ local function draw_scoreCount()
 	local str = tostring(i.value())
 	local x = (#str - 1) * 18
 	Text.print(str, t.x + 64 - x, t.y + 1, 0)
+end
+
+local function draw_hearts()
+
+end
+
+local function draw_itemBox2()
+	local i = hud.itembox
+	
+	if not i.visible then return end
+	
+	local t = {
+		x = i.x,
+		y = i.x,
+		priority = i.priority,
+		
+		image = Graphics.sprites.ui['Container2'].img,
+	}
+	local x = 400 - 372
+	if #Player > 1 and not Camera.isSplit then
+		x = x - 40
+	end
+	
+	if Player[2].character == 1 then
+		t.image = Graphics.sprites.ui['Container1'].img
+	end
+	
+	if Camera.isSplit then
+		t.camera = 2
+	end
+	
+	t.x = t.x + (camera.width / 2) - x
+	t.y = t.y + 16
+	
+	Graphics.draw(t)
 end
 
 local function draw_itemBox()
@@ -136,52 +185,64 @@ local function draw_itemBox()
 		y = i.x,
 		priority = i.priority,
 		
-		image = i.image
+		image = i.image,
+		camera = 1,
 	}
+	
 	local x = 400 - 372
+	if #Player > 1 then
+		t.image = Graphics.sprites.ui['Container1'].img
+		
+		if not Camera.isSplit then
+			x = x + 40
+		end
+	end
 	
 	t.x = t.x + (camera.width / 2) - x
 	t.y = t.y + 16
 	
+	local vx = 0
+	local vy = 0
+	
+	NPC.render{
+		id = Player[1].reservePowerup,
+		
+		x = t.x + 12,
+		y = t.y + 12,
+		
+		priority = RENDER_PRIORITY.HUD - 1,
+		camera = 1,
+	}
+	
 	Graphics.draw(t)
 end
 
-local x = {
-	[1] = camera.width / 2 - 1,
-	[2] = 0
-}
-
-local y = {
-	[1] = camera.height / 2 - 1,
-	[2] = 0
-}
-
 local function draw_camLines()
 	if Camera.type == 1 then
-		for i = 1, #x do
-			Graphics.rect{
-				x = x[i],
-				y = 0,
-				width = 1,
-				height = camera.height,
-				color = Color.black,
-			}
-		end
+		Graphics.rect{
+			x = camera.width - 1,
+			y = 0,
+			width = 2,
+			height = camera.height,
+			color = Color.black,
+			camera = -1,
+		}
 	elseif Camera.type == 2 then
-		for i = 1, #y do
-			Graphics.rect{
-				x = 0,
-				y = y[i],
-				width = camera.width,
-				height = 1,
-				color = Color.black,
-			}
-		end
+		Graphics.rect{
+			x = 0,
+			y = camera.height - 1,
+			width = 2,
+			height = camera.height,
+			color = Color.black,
+			camera = -1,
+		}
 	end
 end
 
 function hud.internalDraw()
 	draw_itemBox()
+	draw_itemBox2()
+	
 	draw_liveCount()
 	draw_coinCount()
 	draw_scoreCount()
