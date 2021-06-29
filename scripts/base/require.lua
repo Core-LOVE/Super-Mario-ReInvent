@@ -12,7 +12,7 @@ do
 	end
 	
 	local req = function(path)
-		local name = check('scripts/' .. path) or check('scripts/base/' .. path) or check('scripts/base/lua/' .. path) or check('scripts/base/engine/' .. path)
+		local name = check('scripts/' .. path) or check('scripts/base/' .. path) or check('scripts/base/lua/' .. path) or check('scripts/base/engine/' .. path) or check('scripts/base/game/' .. path)
 		assert(name ~= nil,"Module '".. path.. "' not found.")
 		
 		local lib = rawRequire(name)

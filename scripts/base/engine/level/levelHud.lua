@@ -144,6 +144,28 @@ local function draw_hearts()
 
 end
 
+local function draw_item(t, c)
+	local vx = 0
+	local vy = 0
+	local cam = 1
+	
+	if c and c == 2 then
+		if Camera.isSplit then
+			cam = 2
+		end
+	end
+	
+	NPC.render{
+		id = Player[c or 1].reservePowerup,
+		
+		x = t.x + 12,
+		y = t.y + 12,
+		
+		priority = RENDER_PRIORITY.HUD - 1,
+		camera = cam,
+	}
+end
+
 local function draw_itemBox2()
 	local i = hud.itembox
 	
@@ -171,6 +193,8 @@ local function draw_itemBox2()
 	
 	t.x = t.x + (camera.width / 2) - x
 	t.y = t.y + 16
+	
+	draw_item(t, 2)
 	
 	Graphics.draw(t)
 end
@@ -200,19 +224,8 @@ local function draw_itemBox()
 	
 	t.x = t.x + (camera.width / 2) - x
 	t.y = t.y + 16
-	
-	local vx = 0
-	local vy = 0
-	
-	NPC.render{
-		id = Player[1].reservePowerup,
-		
-		x = t.x + 12,
-		y = t.y + 12,
-		
-		priority = RENDER_PRIORITY.HUD - 1,
-		camera = 1,
-	}
+
+	draw_item(t)
 	
 	Graphics.draw(t)
 end

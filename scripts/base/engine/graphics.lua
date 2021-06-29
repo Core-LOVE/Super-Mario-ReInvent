@@ -105,16 +105,6 @@ function Graphics.basicDraw(...)
 end
 
 do
-	local function clear()
-		for k = 1, #drawingQueue do
-			local v = drawingQueue[k]
-			
-			if v then
-				table.remove(drawingQueue, k)
-			end
-		end
-	end
-	
 	local function draw(v, x, y)
 		col = v.color
 		if not col then
@@ -186,8 +176,6 @@ do
 				internalDraw2(v)
 			end
 		end
-		
-		clear()
 	end
 	
 	function Graphics.internalDraw()
@@ -196,13 +184,18 @@ do
 		end)
 		
 		internalDraw()
+		
+		drawingQueue = {}
 	end
 end
 
 Graphics.sprites = {
 	block = {},
+	background = {},
+	background2 = {},
 	npc = {},
 	mario = {},
+	
 	ui = {},
 }
 
@@ -227,6 +220,7 @@ for k,v in pairs(Graphics.sprites) do
 end
 
 RENDER_PRIORITY = {
+	BG_COLOR = -102,
 	LEVEL_BG = -100,
 	
 	FAR_BGO = -95,

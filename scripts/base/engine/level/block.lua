@@ -41,13 +41,15 @@ function block:render(arg)
 	arg.opacity = arg.opacity or 1
 	arg.sceneCoords = arg.sceneCoords or true
 	
-		Graphics.basicDraw(
-			Graphics.sprites.block[arg.id].img,
-			arg.x, arg.y,
-			arg.priority,
-			arg.opacity,
-			arg.sceneCoords
-		)
+	if not Game.isColliding(arg.x, arg.y, 32, 32) then return end
+
+	Graphics.basicDraw(
+		Graphics.sprites.block[arg.id].img,
+		arg.x, arg.y,
+		arg.priority,
+		arg.opacity,
+		arg.sceneCoords
+	)
 end
 
 function block.internalDraw()

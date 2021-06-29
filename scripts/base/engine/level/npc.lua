@@ -46,7 +46,7 @@ function npc:render(arg)
 	arg.priority = arg.priority or v.priority or RENDER_PRIORITY.NPC
 	arg.camera = arg.camera or v.camera
 	
-	print(arg.id)
+	if not Game.isColliding(arg.x, arg.y, 32, 32) then return end
 	
 	Graphics.draw{
 		image = Graphics.sprites.npc[arg.id].img,

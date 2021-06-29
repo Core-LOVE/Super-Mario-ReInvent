@@ -32,6 +32,7 @@ require 'level/camera'
 require 'level/block'
 require 'level/npc'
 require 'level/bgo'
+require 'level/background'
 require 'level/section'
 require 'level/playerSettings'
 require 'level/player'
@@ -59,17 +60,54 @@ function love.update()
 	EventManager.callEvent("onTickEnd")
 end
 
+local function scale()
+
+end
+
 function love.draw()
+	scale()
+	
 	EventManager.callEvent("onDraw")
+	
+	Background.render{
+		section = 2,
+		
+		layers = {
+			['BG'] = {
+				img=1,
+				alignY=BOTTOM,
+				parallaxX=0.5,
+				parallaxY=1,
+				repeatX=true,
+			},
+						
+			['Clouds'] = {
+				img=2,
+				parallaxX=0.25,
+				parallaxY=1,
+				alignY=BOTTOM,
+				y=-500,
+				repeatX=true,
+			}
+		}
+	}
 	
 	Block.internalDraw()
 	NPC.internalDraw()
 	Player.internalDraw()
 	LevelHUD.internalDraw()
-
+	Game.drawMenu()
+	
 	EventManager.callEvent("onDrawEnd")
 	
 	Graphics.internalDraw()
 	
 	EventManager.callEvent("onCameraDraw")
+end
+
+function love.resize(w, h)
+	if Game.widescreen then
+		Game.width = w
+		Game.height = h
+	end
 end

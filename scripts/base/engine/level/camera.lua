@@ -28,37 +28,38 @@ function cam.spawn(rx,ry)
 	return v
 end
 
-function cam:inside(v)
-	return Game.isColliding(v, self)
-end
-
-function cam.getIntersecting(x, y, w, h)
-	local ret = {}
+function cam.getIntersecting(x1,y1, x2,y2)
+	if (type(x1) ~= "number") or (type(y1) ~= "number") or (type(x2) ~= "number") or (type(y2) ~= "number") then
+		error("Invalid parameters to getIntersecting")
+	end
 	
-	for k = 1, #cam do
-		local v = cam[k]
-		
-		if v then
-			if v:inside{x = x, y = y, width = w, height = h} then
-				ret[#ret + 1] = v
-			end
+	local ret = {}
+
+	for _,v in ipairs(camera) do
+		if x2 > v.x and
+		y2 > v.y and
+		v.x + v.width > x1 and
+		v.y + v.height > y1 then
+			ret[#ret + 1] = v
 		end
 	end
 	
 	return ret
 end
 
-local function firstCamera()
-	local p = Player[1]
-	local v = camera
-	
-	v.x = (p.x - (v.width * 0.5)) + (p.width * 0.5) * 2
-	v.y = (p.y - (v.height * 0.5)) + (p.height * 0.5) * 2
-	
-	-- local s = Section[p.section].boundary
+local function cameraUpdate()
+	for i = 1, 2 do
+		local p = Player[i]
+		local v = cam[i]
+		
+		v.x = (p.x - (v.width * 0.5)) + (p.width * 0.5) * 2
+		v.y = (p.y - (v.height * 0.5)) + (p.height * 0.5) * 2
+		
+		local s = Section[2].boundary
 
-	-- v.x = math.clamp(v.x, s.left, s.right)
-	-- v.y = math.clamp(v.y, s.top, s.bottom)
+		v.x = math.clamp(v.x, s.left, s.right - v.width)
+		v.y = math.clamp(v.y, s.top, s.bottom - v.height)
+	end
 end
 
 function cam.update()
@@ -66,23 +67,23 @@ function cam.update()
 	local c2 = camera2
 	
 	if cam.type == 0 then
-		c1.height = 600
-		c1.width = 800
+		c1.height = Game.height
+		c1.width = Game.width
 		
 		c2.isHidden = true
 	elseif cam.type == 1 then
-		c1.width = 400
+		c1.width = Game.width / 2
 		c2.width = c1.width
-		c1.height = 600
+		c1.height = Game.height
 		c2.height = c1.height
 		
 		c2.renderX = c1.width
 		
 		c2.isHidden = false
 	elseif cam.type == 2 then
-		c1.height = 300
+		c1.height = Game.height / 2
 		c2.height = c1.height
-		c1.width = 800
+		c1.width = Game.width
 		c2.width = c1.width
 		
 		c2.renderX = 0
@@ -101,7 +102,7 @@ function cam.update()
 	
 	cam.isSplit = (cam.type > 0)
 	
-	firstCamera()
+	cameraUpdate()
 end
 
 _G.Camera = Objectify(cam)
