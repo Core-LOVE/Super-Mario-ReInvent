@@ -2,6 +2,8 @@ debug = true
 
 --[[loading important libs]]
 require 'scripts/base/require'
+
+--[[less important...]]
 require 'objectify'
 require 'print'
 inspect = require 'inspect'
@@ -9,6 +11,9 @@ inspect = require 'inspect'
 --[[loading parsers]]
 ini = require 'parser/ini'
 levelParser = require 'parser/levelParser'
+
+--[[mods loading]]
+require 'mods'
 
 --[[lua stuff]]
 require 'table'

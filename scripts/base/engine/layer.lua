@@ -15,6 +15,10 @@ function Layer.create(name, objs)
 	return v
 end
 
+function Layer.get(name)
+	return layers[name]
+end
+
 function Layer:add(obj)
 	self[#self + 1] = obj
 end
@@ -24,7 +28,7 @@ function Layer:show(noSmoke)
 end
 
 function Layer:hide(noSmoke)
-	self.isHidden = false
+	self.isHidden = true
 end
 
 function Layer:toggle(noSmoke)
@@ -33,6 +37,11 @@ function Layer:toggle(noSmoke)
 	else
 		self:hide(noSmoke)
 	end
+end
+
+function Layer:stop()
+	self.speedX = 0
+	self.speedY = 0
 end
 
 function Layer.internalUpdate()

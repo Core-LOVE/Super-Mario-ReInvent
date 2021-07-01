@@ -54,5 +54,34 @@ Text.print = function(str, x, y, typ)
 			
 			B = B + 18			
 		end
+	elseif typ == 5 then
+		local img = Graphics.sprites.ui['Font2_5'].img
+		local str = str:upper()
+		
+		for cs = 1, #str do
+			local c = string.sub(str, cs, cs)
+			c = c:byte()
+			
+            if(c >= 33 and c <= 126) then
+                C = (c - 33) * 32
+				
+				Graphics.draw{
+					image = img, 
+					x = x + B, 
+					y = y, 
+					sourceX = 2, 
+					sourceY = C, 
+					sourceWidth = 18, 
+					sourceHeight = 16, 
+					priority = RENDER_PRIORITY.TEXT,
+				}
+                B = B + 18
+                if(c == 'M') then
+                    B = B + 2
+				end
+            else
+                B = B + 16
+            end
+		end
 	end
 end

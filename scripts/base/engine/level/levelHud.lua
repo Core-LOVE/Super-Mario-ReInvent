@@ -253,6 +253,8 @@ local function draw_camLines()
 end
 
 function hud.internalDraw()
+	if Game.isMenu then return end
+	
 	draw_itemBox()
 	draw_itemBox2()
 	

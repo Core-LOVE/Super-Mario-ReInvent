@@ -10,7 +10,7 @@ function love.conf(t)
     t.gammacorrect = false              -- Enable gamma-correct rendering, when supported by the system (boolean)
  
     t.window.title = "Super Mario ReInvent"         -- The window title (string)
-    -- t.window.icon = "graphics/ui/icon/smr_16.png"                 -- Filepath to an image to use as the window's icon (string)
+    t.window.icon = "graphics/ui/icon/smr_16.png"                 -- Filepath to an image to use as the window's icon (string)
     t.window.width = 800               -- The window width (number)
     t.window.height = 600             -- The window height (number)
     -- t.window.borderless = true         -- Remove all border visuals from the window (boolean)
