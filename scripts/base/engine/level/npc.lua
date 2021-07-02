@@ -1,5 +1,20 @@
 local npc = {}
 
+npc.config = Configuration.create('npc', {
+	width = 32,
+	height = 32,
+	
+	gfxwidth = 32,
+	gfxheight = 32,
+	gfxoffsetx = 0,
+	gfxoffsety = 0,
+	
+	priority = nil,
+	foreground = false,
+	
+	speed = 1,
+})
+
 npc.fields = function()
 	return {
 		id = 0,
@@ -14,6 +29,9 @@ npc.fields = function()
 		sceneCoords = true,
 		priority = RENDER_PRIORITY.NPC,
 		camera = 0,
+		
+		animationFrame = 0,
+		animationTimer = 0,
 		
 		spawnDirection = 0,
 		direction = 0,
@@ -40,18 +58,28 @@ function npc:render(arg)
 	local arg = arg or {}
 	
 	arg.id = arg.id or v.id
+	local config = NPC.config[arg.id]
+
 	arg.x = arg.x or v.x
 	arg.y = arg.y or v.y
 	arg.sceneCoords = arg.sceneCoords or v.sceneCoords
-	arg.priority = arg.priority or v.priority or RENDER_PRIORITY.NPC
+	arg.priority = arg.priority or (config.priority) or (config.foreground and -15) or RENDER_PRIORITY.NPC
 	arg.camera = arg.camera or v.camera
 	
-	if not Game.isColliding(arg.x, arg.y, 32, 32) then return end
-	
+	if not Game.isColliding(arg.x, arg.y, v.width, v.height) then return end
+
+	local x = arg.x + (v.width * 0.5) - (config.gfxwidth * 0.5) + config.gfxoffsetx
+	local y = arg.y + v.height - config.gfxheight + config.gfxoffsety
+		
 	Graphics.draw{
 		image = Graphics.sprites.npc[arg.id].img,
-		x = arg.x,
-		y = arg.y,
+		x = x,
+		y = y,
+		
+		sourceY = v.animationFrame * config.gfxheight,
+		sourceWidth = config.gfxwidth,
+		sourceHeight = config.gfxheight,
+
 		isSceneCoordinates = arg.sceneCoords,
 		camera = arg.camera,
 	}
@@ -67,6 +95,10 @@ function npc.spawn(id, x, y, section)
 		section = section,
 	}
 	v.idx = #npc + 1
+	
+	local config = NPC.config[id]
+	v.width = config.width
+	v.height = config.height
 	
 	npc[#npc + 1] = v
 	return v

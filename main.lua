@@ -3,14 +3,16 @@ debug = true
 --[[loading important libs]]
 require 'scripts/base/require'
 
---[[less important...]]
-require 'objectify'
-require 'print'
-inspect = require 'inspect'
-
 --[[loading parsers]]
 ini = require 'parser/ini'
 levelParser = require 'parser/levelParser'
+txt = require 'parser/txt'
+
+--[[less important...]]
+require 'objectify'
+require 'configuration'
+require 'print'
+inspect = require 'inspect'
 
 --[[mods loading]]
 require 'mods'

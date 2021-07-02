@@ -12,11 +12,20 @@ end
 
 function options:add(option)
 	-- option must be an table!!
+	option.disabled = option.disabled or false
 	
 	self[#self + 1] = option
 end
 
 function options:moveUp()
+	local c = self[self.cursor - 1]
+	
+	if c then
+		if c.disabled then
+			self.cursor = self.cursor - 1
+		end
+	end
+	
 	self.cursor = self.cursor - 1
 	if self.cursor < 0 then
 		self.cursor = #self
@@ -24,7 +33,16 @@ function options:moveUp()
 end
 
 function options:moveDown()
-	self.cursor = (self.cursor + 1) % #self
+	local c = self[self.cursor + 1]
+	
+	if c then
+		if c.disabled then
+			self.cursor = self.cursor + 1
+		end
+	end
+	
+	self.cursor = self.cursor + 1 
+	self.cursor = self.cursor % #self
 end
 
 function options:press()

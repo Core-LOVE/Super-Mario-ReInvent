@@ -1,5 +1,31 @@
 local block = {}
 
+block.config = Configuration.create('block', {
+	width = 32,
+	height = 32,
+	
+	sizable = false,
+	connecting = false,
+	playerpassthrough = false,
+	npcpassthrough = false,
+	passthrough = false,
+	floorslope = 0,
+	ceilingslope = 0,
+	semisolid = false,
+	lava = false,
+	bumpable = false,
+	smashable = false,
+	destroyeffect = 1,
+	explodable = false,
+	hammer = false,
+	noicebrick = false,
+	bounceside = false,
+	diggable = false,
+	frames = 1,
+	framespeed = 8,
+	foreground = false,
+})
+
 local frame = {}
 local frametimer = {}
 

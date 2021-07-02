@@ -1,12 +1,13 @@
 Text = {}
 
-Text.print = function(str, x, y, typ)
+Text.print = function(str, x, y, typ, opacity)
 	local str = str or ""
 	str = tostring(str)
 	
 	local x = x or 0
 	local y = y or 0
 	local typ = typ or 3
+	local opacity = opacity or 1
 	
 	local B = 0
 	local C = 0
@@ -31,7 +32,9 @@ Text.print = function(str, x, y, typ)
 					sourceWidth = 18, 
 					sourceHeight = 16, 
 					priority = RENDER_PRIORITY.TEXT,
+					opacity = opacity,
 				}
+				
                 B = B + 18
                 if(c == 'M') then
                     B = B + 2
