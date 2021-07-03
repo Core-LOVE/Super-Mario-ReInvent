@@ -1,14 +1,14 @@
 local Graphics = {}
+
 local drawingQueue = {}
+local shaders = {}
+
+function Graphics.loadShader(pixel, vertex)
+	return love.graphics.newShader(pixel, vertex)
+end
 
 function Graphics.loadImage(path)
-	local img = love.graphics.newImage(path)
-	local mt = getmetatable(img)
-	
-	mt.width = img:getWidth()
-	mt.height = img:getHeight()
-	
-	return img
+	return love.graphics.newImage(path)
 end
 
 local function defaultArg(arg)
@@ -17,6 +17,15 @@ local function defaultArg(arg)
 	arg.isSceneCoordinates = arg.isSceneCoordinates or false
 	arg.priority = arg.priority or 1
 	arg.camera = arg.camera or 0
+	
+	arg.shader = arg.shader
+	if arg.shader then
+		arg.uniforms = arg.uniforms or {}
+		
+		for k,v in pairs(arg.uniforms) do
+			arg.shader:send(k, v)
+		end
+	end
 end
 
 function Graphics.rect(arg)
@@ -29,6 +38,64 @@ function Graphics.rect(arg)
 	arg.color = arg.color
 	arg.form = 'rect'
 	arg.mode = arg.mode or 'fill'
+	
+	table.insert(drawingQueue, arg)
+	return arg
+end
+
+function Graphics.meshDraw(arg)
+	local arg = arg or {}
+
+	defaultArg(arg)
+	
+	arg.texture = arg.texture or {
+		0,0,
+		1,0,
+		1,1,
+		0,1
+	}
+	
+	arg.color = arg.color or {
+		Color.white,
+		Color.white,
+		Color.white,
+		Color.white,
+	}
+	
+	arg.mode = arg.mode or "fan"
+	
+	local vertices = {}
+	
+	vertices[1] = {
+		arg.vertex[1], arg.vertex[2],
+		arg.texture[1], arg.texture[2],
+		arg.color[1], arg.color[2], arg.color[3], arg.color[4]
+	}
+	
+	vertices[2] = {
+		arg.vertex[3], arg.vertex[4],
+		arg.texture[3], arg.texture[4],
+		arg.color[5], arg.color[6], arg.color[7], arg.color[8]
+	}
+	
+	vertices[3] = {
+		arg.vertex[5], arg.vertex[6],
+		arg.texture[5], arg.texture[6],
+		arg.color[9], arg.color[10], arg.color[11], arg.color[12]
+	}
+	
+	vertices[4] = {
+		arg.vertex[7], arg.vertex[8],
+		arg.texture[7], arg.texture[8],
+		arg.color[13], arg.color[14], arg.color[15], arg.color[16]
+	}
+	
+	local img = arg.image
+	arg.image = love.graphics.newMesh(vertices, arg.mode)
+	
+	if img then
+		arg.image:setTexture(img)
+	end
 	
 	table.insert(drawingQueue, arg)
 	return arg
@@ -124,6 +191,7 @@ do
 				love.graphics.rectangle(v.mode, v.x + .5, v.y + .5, v.width, v.height)
 			end
 		end
+		
 		love.graphics.setColor(Color.white)
 	end
 	

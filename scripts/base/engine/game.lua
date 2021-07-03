@@ -25,33 +25,77 @@ Game.isPaused = false
 
 
 Game.isMenu = true
-Game.logo = 1
+Game.logo = 4
 do
 	local Options = require 'options'
 
 	local menu = Options.new()
+	menu.maxDelay = 10
+	
 	menu:add{name = '1 Player Game'}
 	menu:add{name = '2 Player Game'}
 	menu:add{name = 'Battle Game'}
 	menu:add{name = 'Modifications', disabled = true}
 	
-	menu:add{name = 'Options', onPress = function()
+	menu:add{name = 'Options', onBack = function()
+		menu.parent = nil
+	end,
+	
+	onPress = function()
 		menu = Options.new(menu)
-		menu:add{name = 'Player 1 Controls'}
+		menu.maxDelay = 10
+		
+		menu:add{name = 'Player 1 Controls', onPress = function()
+			menu = Options.new(menu)
+			menu.maxDelay = 10
+			
+			for k,v in pairs(Keys.player[1]) do
+				local name = string.format('%s.........%s', k, v)
+				print(name)
+				local key = menu:add{name = k .. '....' .. v}
+				
+				key.onPress = function()
+					menu.locked = (not menu.locked)
+					
+					if menu.locked then
+						key.name = k .. '....'
+						
+						Keys.pressed.key = nil
+						Keys.pressed.delay = menu.maxDelay
+						
+						menu.onUpdate = function()
+							if Keys.pressed.key then
+								key.name = k .. '....' .. Keys.pressed.key
+								Keys.player[1][k] = Keys.pressed.key
+								
+								Sound.play(14)
+								menu.locked = false
+								menu.onUpdate = nil
+								menu.delay = menu.maxDelay
+								
+								return
+							end
+						end
+					end
+				end
+			end
+			menu.type = 'controls'
+		end}
+		
 		menu:add{name = 'Player 2 Controls'}
 		menu:add{name = 'Fullscreen Mode'}
 		menu:add{name = 'View Credits'}
-		menu:add{name = 'Change Logo'}
+		menu:add{name = 'Change Logo', onPress = function()
+			Game.logo = (Game.logo + 1) % 5
+		end}
 	end}
 
 	menu:add{name = 'Exit'}
 	
-	menu.cursor = 4
-	
 	Game.drawMenu = function()
 		if not Game.isMenu then return end
 		
-		local logo_img = Graphics.sprites.ui['Logo' .. Game.logo].img
+		local logo_img = Graphics.sprites.ui['Logo' .. Game.logo + 1].img
 		local curtain_img = Graphics.sprites.ui['MenuGFX1'].img
 		curtain_img:setWrap('repeat', 'clampzero')
 		
@@ -62,7 +106,7 @@ do
 			x = 0,
 			
 			sourceWidth = Game.width,
-			sourceHeight = curtain_img.height,
+			sourceHeight = curtain_img:getHeight(),
 			
 			priority = RENDER_PRIORITY.HUD,
 		}
@@ -70,24 +114,20 @@ do
 		Graphics.draw{
 			image = logo_img,
 			x = x / 2, 
-			y = curtain_img:getHeight() + 16,
+			y = curtain_img:getHeight() + 16 + logo_img:getHeight() / 8,
 			
 			priority = RENDER_PRIORITY.HUD,
 		}
 		
-		Graphics.draw{
-			image = Graphics.sprites.ui['MCursor0'].img,
-			x = (Game.width / 2) - 124,
-			y = 340 + 30 * menu.cursor
-		}
+		-- options
 		
-		for k,v in ipairs(menu) do
-			local o = 1
-			if v.disabled then
-				o = 0.75
-			end
-			
-			Text.print(v.name, (Game.width / 2) - 100, 340 + 30 * (k - 1), 3, o)
+		local y = 340
+		if menu.type == 'controls' then
+			y = 240
 		end
+		
+		menu:assign(Keys.isDown('up'), Keys.isDown('down'), Keys.isDown('jump'), Keys.isDown('run'))
+		menu:update()
+		menu:draw(Game.width / 2 - 100, y)
 	end
 end

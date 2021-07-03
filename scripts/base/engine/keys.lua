@@ -22,6 +22,8 @@ keys.player[2] = {
 	
 }
 
+keys.pressed = {key = '', scancode = '', isrepeat = false, delay = 0}
+
 function keys.isDown(key, plr)
 	local plr = plr or 1
 	

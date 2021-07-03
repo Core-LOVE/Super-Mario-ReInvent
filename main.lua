@@ -1,3 +1,11 @@
+do
+	love.graphics.clear()
+	
+	love.graphics.draw(love.graphics.newImage 'graphics/ui/LoadCoin.png', 800 - 48, 600 - 48)
+	
+	love.graphics.present()
+end
+
 debug = true
 
 --[[loading important libs]]
@@ -13,6 +21,7 @@ require 'objectify'
 require 'configuration'
 require 'print'
 inspect = require 'inspect'
+require 'version'
 
 --[[mods loading]]
 require 'mods'
@@ -58,11 +67,18 @@ function love.load()
 end
 
 function love.update()
+	if Keys.pressed.delay > 0 then
+		Keys.pressed.delay = Keys.pressed.delay - 1
+	end
+	
 	camera2.x = camera.x
 	camera2.y = camera.y
 	
 	EventManager.callEvent("onTick")
+	
+	NPC.update()
 	Camera.update()
+	
 	EventManager.callEvent("onCameraUpdate")
 	EventManager.callEvent("onTickEnd")
 end
@@ -117,4 +133,12 @@ function love.resize(w, h)
 		Game.width = w
 		Game.height = h
 	end
+end
+
+function love.keypressed(key, scan, rep)
+	if Keys.pressed.delay > 0 then return end
+	
+	Keys.pressed.key = key
+	Keys.pressed.scancode = scan
+	Keys.pressed.isrepeat = rep
 end

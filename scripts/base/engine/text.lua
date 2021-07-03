@@ -1,6 +1,6 @@
 Text = {}
 
-Text.print = function(str, x, y, typ, opacity)
+Text.print = function(str, x, y, typ, priority, opacity)
 	local str = str or ""
 	str = tostring(str)
 	
@@ -8,6 +8,7 @@ Text.print = function(str, x, y, typ, opacity)
 	local y = y or 0
 	local typ = typ or 3
 	local opacity = opacity or 1
+	local priority = priority or RENDER_PRIORITY.TEXT
 	
 	local B = 0
 	local C = 0
@@ -31,7 +32,7 @@ Text.print = function(str, x, y, typ, opacity)
 					sourceY = C, 
 					sourceWidth = 18, 
 					sourceHeight = 16, 
-					priority = RENDER_PRIORITY.TEXT,
+					priority = priority,
 					opacity = opacity,
 				}
 				
@@ -52,7 +53,8 @@ Text.print = function(str, x, y, typ, opacity)
 				image = img, 
 				x = x + B, 
 				y = y, 
-				priority = RENDER_PRIORITY.TEXT,
+				priority = priority,
+				opacity = opacity,
 			}
 			
 			B = B + 18			
@@ -76,7 +78,8 @@ Text.print = function(str, x, y, typ, opacity)
 					sourceY = C, 
 					sourceWidth = 18, 
 					sourceHeight = 16, 
-					priority = RENDER_PRIORITY.TEXT,
+					priority = priority,
+					opacity = opacity,
 				}
                 B = B + 18
                 if(c == 'M') then
