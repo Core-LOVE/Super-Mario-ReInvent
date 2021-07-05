@@ -24,7 +24,7 @@ Game.speedrun = {time = 0, enabled = false}
 Game.isPaused = false
 
 
-Game.isMenu = true
+Game.isMenu = false
 Game.logo = 4
 do
 	local Options = require 'options'
@@ -32,7 +32,9 @@ do
 	local menu = Options.new()
 	menu.maxDelay = 10
 	
-	menu:add{name = '1 Player Game'}
+	menu:add{name = '1 Player Game', onPress = function()
+		Level.unload()
+	end}
 	menu:add{name = '2 Player Game'}
 	menu:add{name = 'Battle Game'}
 	menu:add{name = 'Modifications', disabled = true}

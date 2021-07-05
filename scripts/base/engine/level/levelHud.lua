@@ -5,7 +5,6 @@ hud.itembox = {
 	y = 0,
 	priority = RENDER_PRIORITY.HUD,
 
-	image = Graphics.sprites.ui['Container0'].img,
 	visible = true
 }
 hud.livecount = {
@@ -13,7 +12,6 @@ hud.livecount = {
 	y = 0,
 	priority = RENDER_PRIORITY.HUD,
 	
-	image = Graphics.sprites.ui['Interface3'].img,
 	visible = true,
 	
 	value = function()
@@ -30,7 +28,6 @@ hud.coincount = {
 	y = 0,
 	priority = RENDER_PRIORITY.HUD,
 	
-	image = Graphics.sprites.ui['Interface2'].img,
 	visible = true,
 	
 	value = function()
@@ -69,7 +66,7 @@ local function draw_liveCount()
 		y = i.x,
 		priority = i.priority,
 		
-		image = i.image
+		image = Graphics.sprites.ui['Interface3'].img
 	}
 	local x = 166
 	if #Player > 1 and not Camera.isSplit then
@@ -93,7 +90,7 @@ local function draw_coinCount()
 		y = i.x,
 		priority = i.priority,
 		
-		image = i.image
+		image = Graphics.sprites.ui['Interface2'].img
 	}
 	local x = 88
 	if #Player > 1 and not Camera.isSplit then
@@ -209,7 +206,7 @@ local function draw_itemBox()
 		y = i.x,
 		priority = i.priority,
 		
-		image = i.image,
+		image = Graphics.sprites.ui['Container0'].img,
 		camera = 1,
 	}
 	

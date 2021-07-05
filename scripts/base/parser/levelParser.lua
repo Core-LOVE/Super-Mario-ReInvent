@@ -271,7 +271,7 @@ do
         parsingData.currentTypeName = nil
         parsingData.currentTypeData = nil
 
-        for line in love.filesystem.lines(path) do
+        for line in io.lines(path) do
             parseLine(parsingData,path,line)
         end
     end
@@ -279,20 +279,19 @@ do
     formats.lvlx = loadLevel
 end
 
-function levelParser.load(path, dat)
-	isOverworld = false
-	
+local function getName(file)
+	return file:match("^.+/(.+)$")
+end
+
+function levelParser.load(path)
     local data
 	
 	if path ~= nil then
-		data = love.filesystem.read(path)
+		data = io.open(path)
+		data = data:read()
 	end
 	
     parsingAssert(data ~= nil,"Could not find file",path)
-	
-	if dat ~= nil then
-		data = dat
-	end
 	
     local format = path:match("^.*%.(.+)$")
     local formatLoad = formats[format]
@@ -301,11 +300,26 @@ function levelParser.load(path, dat)
 	
     formatLoad(path)
 	
+	local levelFilename = getName(path)
+	levelFilename = levelFilename:gsub('.lvlx', '')
+	
+	Level.current.pathName = levelFilename
+	Level.current.levelFolder = path:gsub('.lvlx', '') .. '/'
+	Level.current.fileFolder = path:gsub(getName(path), '')
+	
+	Level.current.content = data
+	
 	-- LevelPath = string.gsub(path, ".lvlx", "")
 	-- if love.filesystem.getInfo(LevelPath.."/luna.lua") then
 		-- LevelScript = require(LevelPath.."/luna")
 		-- onStart()
 	-- end
+end
+
+function levelParser.parse(str)
+	local filedata = love.filesystem.newFileData(str)
+	
+	return levelParser.load(filedata)
 end
 
 return levelParser

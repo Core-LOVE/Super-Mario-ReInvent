@@ -1,5 +1,28 @@
 local npc = {}
 
+local function callSpecialEvent(v,eventName)
+	npcManager.callSpecialEvent(v,eventName)
+end
+
+local scripts = {}
+
+local function requireScript(k) 
+	if not scripts[k] then
+		NPC_ID = k
+		
+		local script = require('npc-' .. k, true)
+		
+		if not script then
+			script = require('npc/npc-' .. k, true)
+		end
+		
+		scripts[k] = true
+		NPC_ID = nil
+		
+		return
+	end
+end
+
 npc.config = Configuration.create('npc', {
 	width = 32,
 	height = 32,
@@ -31,7 +54,7 @@ npc.fields = function()
 		speedY = 0,
 		
 		sceneCoords = true,
-		priority = RENDER_PRIORITY.NPC,
+		priority = RENDER_PRIORITY.npc,
 		camera = 0,
 		
 		animationFrame = 0,
@@ -65,12 +88,12 @@ function npc:render(arg)
 	local arg = arg or {}
 	
 	arg.id = arg.id or v.id
-	local config = NPC.config[arg.id]
+	local config = npc.config[arg.id]
 
 	arg.x = arg.x or v.x
 	arg.y = arg.y or v.y
 	arg.sceneCoords = arg.sceneCoords or v.sceneCoords
-	arg.priority = arg.priority or (config.priority) or (config.foreground and -15) or RENDER_PRIORITY.NPC
+	arg.priority = arg.priority or (config.priority) or (config.foreground and -15) or RENDER_PRIORITY.npc
 	arg.camera = arg.camera or v.camera
 	
 	if not Game.isColliding(arg.x, arg.y, v.width, v.height) then return end
@@ -103,7 +126,7 @@ function npc.spawn(id, x, y, section)
 	}
 	v.idx = #npc + 1
 	
-	local config = NPC.config[id]
+	local config = npc.config[id]
 	v.width = config.width
 	v.height = config.height
 	
@@ -187,12 +210,18 @@ do
 				end
 			end
 		end
+		
+		callSpecialEvent(v,"onAnimateNPC")
 	end
 	
 	function npc.update()
 		for k = 1, #npc do
+			requireScript(npc[k].id)
+	
 			if npc[k] then
 				frame(npc[k])
+				
+				callSpecialEvent(v,"onActiveNPC")
 			end
 		end
 	end
@@ -201,6 +230,98 @@ end
 function npc.internalDraw()
 	for k,v in ipairs(npc) do
 		v:render()
+	end
+end
+
+
+do
+	function npc.count()
+		return #npc
+	end
+
+	function npc.get(idFilter)
+		local ret = {}
+
+		local idFilterType = type(idFilter)
+		local idMap
+		if idFilter == "table" then
+			idMap = {}
+
+			for _,id in ipairs(idFilter) do
+				idMap[id] = true
+			end
+		end
+
+
+		for _,v in ipairs(npc) do
+			if idFilter == nil or idFilter == -1 or idFilter == v.id or (idMap ~= nil and idMap[v.id]) then
+				ret[#ret + 1] = v
+			end
+		end
+
+		return ret
+	end
+
+	function npc.getIntersecting(x1,y1,x2,y2)
+		local ret = {}
+
+		for _,v in ipairs(npc) do
+			if v.x <= x2 and v.y <= y2 and v.x+v.width >= x1 and v.y+v.height >= y1 then
+				ret[#ret + 1] = v
+			end
+		end
+
+		return ret
+	end
+
+
+	-- Based on the lunalua implementation
+
+	local function iterate(args,i)
+		while (i <= args[1]) do
+			local v = npc[i]
+
+			local idFilter = args[2]
+			local idMap = args[3]
+
+			if idFilter == nil or idFilter == -1 or idFilter == v.id or (idMap ~= nil and idMap[v.id]) then
+				return i+1,v
+			end
+
+			i = i + 1
+		end
+	end
+
+	function npc.iterate(idFilter)
+		local args = {#npc,idFilter}
+
+		if type(idFilter) == "table" then
+			args[3] = {}
+
+			for _,id in ipairs(idFilter) do
+				args[3][id] = true
+			end
+		end
+
+		return iterate, args, 1
+	end
+
+	local function iterateIntersecting(args,i)
+		while (i <= args[1]) do
+			local v = npc[i]
+
+			if v.x <= args[4] and v.y <= args[5] and v.x+v.width >= args[2] and v.y+v.height >= args[3] then
+				return i+1,v
+			end
+
+			i = i + 1
+		end
+	end
+
+	function npc.iterateIntersecting(x1,y1,x2,y2)
+		local args = {#npc,x1,y1,x2,y2}
+
+		return iterateIntersecting, args, 1
 	end
 end
 

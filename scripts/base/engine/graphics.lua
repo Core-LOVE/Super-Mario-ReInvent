@@ -1,14 +1,34 @@
 local Graphics = {}
-
 local drawingQueue = {}
 local shaders = {}
 
-function Graphics.loadShader(pixel, vertex)
-	return love.graphics.newShader(pixel, vertex)
-end
+do
+	local function checkPath(path)
+		if nfs.read(path) ~= nil then
+			return path
+		end
+	end
 
-function Graphics.loadImage(path)
-	return love.graphics.newImage(path)
+	local open = function(path)
+		local c = Level.current
+		local path = checkPath(c.levelFolder .. path) or checkPath(c.fileFolder .. path) or checkPath(_PATH .. path) or checkPath(path)
+		
+		if path ~= nil then
+			return nfs.newFileData(path)
+		end
+	end
+	
+	function Graphics.loadShader(pixel, vertex)
+		return love.graphics.newShader(pixel, vertex)
+	end
+	
+	function Graphics.loadImage(path)
+		local file = open(path)
+		
+		if file then
+			return love.graphics.newImage(file)
+		end
+	end
 end
 
 local function defaultArg(arg)
@@ -39,8 +59,7 @@ function Graphics.rect(arg)
 	arg.form = 'rect'
 	arg.mode = arg.mode or 'fill'
 	
-	table.insert(drawingQueue, arg)
-	return arg
+	drawingQueue[#drawingQueue + 1] = arg
 end
 
 function Graphics.meshDraw(arg)
@@ -97,8 +116,7 @@ function Graphics.meshDraw(arg)
 		arg.image:setTexture(img)
 	end
 	
-	table.insert(drawingQueue, arg)
-	return arg
+	drawingQueue[#drawingQueue + 1] = arg
 end
 
 function Graphics.draw(arg)
@@ -117,8 +135,7 @@ function Graphics.draw(arg)
 		arg.quad = love.graphics.newQuad(arg.sourceX, arg.sourceY, arg.sourceWidth, arg.sourceHeight, arg.image:getDimensions())
 	end
 	
-	table.insert(drawingQueue, arg)
-	return arg
+	drawingQueue[#drawingQueue + 1] = arg
 end
 
 -- (img, x, y, sourceX, sourceY, width, height, priority) and etc...
@@ -207,7 +224,9 @@ do
 	
 	local function internalDraw2(v)
 		if v.camera == 0 then
-			for _,c in ipairs(Camera) do
+			for i = 1, #Camera do
+				local c = Camera[i]
+				
 				if not c.isHidden then
 					love.graphics.setCanvas(c.canvas)
 					love.graphics.clear()
@@ -270,14 +289,22 @@ Graphics.sprites = {
 for k,v in pairs(Graphics.sprites) do
 	setmetatable(v, {__index = function(self, key)
 		if k ~= 'ui' then
-			local img = Graphics.loadImage('graphics/' .. k .. '/' .. k .. '-' .. key .. '.png')
+			local img = Graphics.loadImage(k .. '-' .. key .. '.png')
+			
+			if not img then
+				img = Graphics.loadImage('graphics/' .. k .. '/' .. k .. '-' .. key .. '.png')
+			end
 			
 			self[key] = {}
 			self[key].img = img
 
 			return rawget(self, key)
 		else
-			local img = Graphics.loadImage('graphics/' .. k .. '/' .. key .. '.png')
+			local img = Graphics.loadImage(key .. '.png')
+			
+			if not img then
+				img = Graphics.loadImage('graphics/' .. k .. '/' .. key .. '.png')
+			end
 			
 			self[key] = {}
 			self[key].img = img

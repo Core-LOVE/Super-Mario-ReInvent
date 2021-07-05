@@ -1,19 +1,41 @@
 Configuration = {}
 
+local function checkPath(path)
+	if nfs.read(path) ~= nil then
+		return path
+	end
+end
+
+local open = function(path)
+	local c = Level.current
+	local path = checkPath(c.levelFolder .. path) or checkPath(c.fileFolder .. path) or checkPath(_PATH .. path) or checkPath(path)
+	
+	return path
+end
+
 Configuration.create = function(name, t)
 	local t = t or {}
 	
 	setmetatable(t, {__index = function(self, k)
-		local path = 'config/' .. name .. '/' .. name .. '-' .. k .. '.txt'
-		local custom = {}
+		local path = open(name .. '-' .. k .. '.txt')
 		
-		if love.filesystem.getInfo(path) then
-			custom = txt.load(path)
+		if not path then
+			path = open('config/' .. name .. '/' .. name .. '-' .. k .. '.txt')
 		end
 		
-		setmetatable(custom, {__index = function(_, key)
-			return t[key]
-		end})
+		local custom = {}
+		
+		for k,v in pairs(t) do
+			custom[k] = v
+		end
+		
+		if nfs.getInfo(path) then
+			local fields = txt.load(path)
+			
+			for k,v in pairs(fields) do
+				custom[k] = v
+			end
+		end
 		
 		rawset(self, k, custom)
 		return rawget(self, k)
