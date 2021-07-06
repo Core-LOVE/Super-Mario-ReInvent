@@ -49,6 +49,7 @@ require 'text'
 --[[eventmanager and etc]]
 require 'eventManager'
 playerManager = require 'manager/playerManager'
+blockManager = require 'manager/blockManager'
 npcManager = require 'manager/npcManager'
 
 --[[level classes]]
@@ -68,10 +69,22 @@ require 'level/levelHud'
 	-- end
 -- end
 
+do
+	local code = [[
+		local file = io.read("*line")
+		
+		print(file)
+		print(1)
+	]]
+	
+	thread = love.thread.newThread(code)
+	thread:start()
+end
+
 function love.load()
 	Level.load('D:/MyGames/Super-Mario-ReInvent/tl/a couple blocks.lvlx')
 	
-	Camera.type = 0
+	Camera.type = 1
 end
 
 function love.update()

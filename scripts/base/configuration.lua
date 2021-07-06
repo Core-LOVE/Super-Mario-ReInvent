@@ -29,11 +29,13 @@ Configuration.create = function(name, t)
 			custom[k] = v
 		end
 		
-		if nfs.getInfo(path) then
-			local fields = txt.load(path)
-			
-			for k,v in pairs(fields) do
-				custom[k] = v
+		if path then
+			if nfs.getInfo(path) then
+				local fields = txt.load(path)
+				
+				for k,v in pairs(fields) do
+					custom[k] = v
+				end
 			end
 		end
 		

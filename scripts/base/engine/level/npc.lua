@@ -130,6 +130,8 @@ function npc.spawn(id, x, y, section)
 	v.width = config.width
 	v.height = config.height
 	
+	requireScript(id)
+	
 	npc[#npc + 1] = v
 	return v
 end
@@ -216,8 +218,6 @@ do
 	
 	function npc.update()
 		for k = 1, #npc do
-			requireScript(npc[k].id)
-	
 			if npc[k] then
 				frame(npc[k])
 				

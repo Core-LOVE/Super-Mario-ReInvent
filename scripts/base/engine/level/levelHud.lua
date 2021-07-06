@@ -77,7 +77,7 @@ local function draw_liveCount()
 	t.y = t.y + 26
 	
 	Graphics.draw(t)
-	count(tostring(i.value()), t.x + (t.image:getWidth() * 2) + 8, t.y + 1)
+	count(tostring(i.value()), t.x + (t.image:getWidth()) + 8, t.y + 1)
 end
 
 local function draw_coinCount()
