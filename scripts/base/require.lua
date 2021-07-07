@@ -43,8 +43,8 @@ do
 		local name = check(c.levelFolder .. path) or check(c.fileFolder .. path)
 		
 		if not name then
-			name = check(_PATH .. 'scripts/' .. path) or check(_PATH .. 'scripts/base/' .. path) or check(_PATH .. 'scripts/base/lua/' .. path) or 
-			check(_PATH .. 'scripts/base/engine/' .. path) or check(_PATH .. 'scripts/base/game/' .. path) or check(_PATH .. path)
+			name = check(_PATH .. 'scripts/' .. path) or check(_PATH .. 'scripts/base/' .. path) or 
+			check(_PATH .. 'scripts/base/engine/' .. path) or check(_PATH .. path)
 		end
 		
 		if not noerror then

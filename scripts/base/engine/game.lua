@@ -27,7 +27,7 @@ Game.isPaused = false
 Game.isMenu = false
 Game.logo = 4
 do
-	local Options = require 'options'
+	local Options = require 'game/options'
 
 	local menu = Options.new()
 	menu.maxDelay = 10

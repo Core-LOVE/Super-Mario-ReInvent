@@ -40,6 +40,7 @@ npc.config = Configuration.create('npc', {
 	foreground = false,
 	
 	speed = 1,
+	disablerender = false,
 })
 
 npc.fields = function()
@@ -59,6 +60,7 @@ npc.fields = function()
 		
 		animationFrame = 0,
 		animationTimer = 0,
+		disableRender = false,
 		
 		spawnDirection = 0,
 		direction = 0,
@@ -229,7 +231,9 @@ end
 
 function npc.internalDraw()
 	for k,v in ipairs(npc) do
-		v:render()
+		if not npc.config[v.id].disablerender and not v.disableRender then
+			v:render()
+		end
 	end
 end
 

@@ -34,7 +34,7 @@ end
 local function defaultArg(arg)
 	arg.x = arg.x or 0
 	arg.y = arg.y or 0
-	arg.isSceneCoordinates = arg.isSceneCoordinates or false
+	arg.isSceneCoordinates = arg.isSceneCoordinates or arg.sceneCoords or false
 	arg.priority = arg.priority or 1
 	arg.camera = arg.camera or 0
 	
@@ -119,8 +119,53 @@ function Graphics.meshDraw(arg)
 	drawingQueue[#drawingQueue + 1] = arg
 end
 
+alignIN = {
+	TOP_LEFT = "TOP_LEFT",
+	TOP_RIGHT = "TOP_RIGHT",
+	TOP = "TOP",
+	
+	CENTER_LEFT = "CENTER_LEFT",
+	CENTER_RIGHT = "CENTER_RIGHT",
+	CENTER = "CENTER",
+	
+	BOTTOM_lEFT = "BOTTOM_lEFT",
+	BOTTOM_RIGHT = "BOTTOM_RIGHT",
+	BOTTOM = "BOTTOM",
+}
+
+local function setAlign(arg)
+	local o = arg.align
+	local v = arg.image
+	
+	-- redigitiscool
+	
+	if o == "TOP_RIGHT" then
+		arg.alignX = v:getWidth()
+	elseif o == "TOP" then
+		arg.alignX = v:getWidth() / 2 
+	elseif o == "CENTER_LEFT" then
+		arg.alignY = v:getHeight() / 2
+	elseif o == "CENTER_RIGHT" then
+		arg.alignX = v:getWidth()
+		arg.alignY = v:getHeight() / 2
+	elseif o == "CENTER" then
+		arg.alignX = v:getWidth() / 2
+		arg.alignY = v:getHeight() / 2
+	elseif o == "BOTTOM_lEFT" then
+		arg.alignY = v:getHeight()
+	elseif o == "BOTTOM_RIGHT" then
+		arg.alignX = v:getWidth()
+		arg.alignY = v:getHeight()
+	elseif o == "BOTTOM" then
+		arg.alignX = v:getWidth() / 2
+		arg.alignY = v:getHeight()
+	end
+end
+
 function Graphics.draw(arg)
 	local arg = arg or {}
+	
+	if arg.image == nil then return end
 	
 	defaultArg(arg)
 	arg.rotation = arg.rotation or 0
@@ -130,6 +175,16 @@ function Graphics.draw(arg)
 	arg.sourceY = arg.sourceY or 0
 	arg.sourceWidth = arg.sourceWidth or 0
 	arg.sourceHeight = arg.sourceHeight or 0
+	
+	arg.scaleX = arg.scaleX or 1
+	arg.scaleY = arg.scaleY or 1
+	
+	arg.alignX = arg.alignX or 0
+	arg.alignY = arg.alignY or 0
+	setAlign(arg)
+	
+	arg.shearX = arg.shearX or 0
+	arg.shearY = arg.shearY or 0
 	
 	if arg.sourceHeight ~= 0 or arg.sourceWidth ~= 0 then
 		arg.quad = love.graphics.newQuad(arg.sourceX, arg.sourceY, arg.sourceWidth, arg.sourceHeight, arg.image:getDimensions())
@@ -199,9 +254,9 @@ do
 		
 		if not v.form then
 			if not v.quad then
-				love.graphics.draw(v.image, v.x + (x or 0), v.y + (y or 0), v.rotation)
+				love.graphics.draw(v.image, v.x + (x or 0), v.y + (y or 0), v.rotation, v.scaleX, v.scaleY, v.alignX, v.alignY, v.shearX, v.shearY)
 			else
-				love.graphics.draw(v.image, v.quad, v.x + (x or 0), v.y + (y or 0), v.rotation)	
+				love.graphics.draw(v.image, v.quad, v.x + (x or 0), v.y + (y or 0), v.rotation, v.scaleX, v.scaleY, v.alignX, v.alignY, v.shearX, v.shearY)	
 			end
 		else
 			if v.form == "rect" then
@@ -265,10 +320,12 @@ do
 		end
 	end
 	
+	local function sortQueue(a,b)
+		return (a.priority < b.priority)
+	end
+	
 	function Graphics.internalDraw()
-		table.sort(drawingQueue, function(a,b)
-			return (a.priority < b.priority)
-		end)
+		table.sort(drawingQueue, sortQueue)
 		
 		internalDraw()
 		

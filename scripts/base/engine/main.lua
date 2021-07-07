@@ -35,7 +35,7 @@ inspect = require 'inspect'
 require 'version'
 
 --[[mods loading]]
-require 'mods'
+require 'game/mods'
 
 --[[engine stuff]]
 require 'game'
@@ -51,6 +51,9 @@ require 'eventManager'
 playerManager = require 'manager/playerManager'
 blockManager = require 'manager/blockManager'
 npcManager = require 'manager/npcManager'
+
+--[[global classes]]
+require 'game/effect'
 
 --[[level classes]]
 require 'level/camera'
@@ -71,10 +74,8 @@ require 'level/levelHud'
 
 do
 	local code = [[
+	
 		local file = io.read("*line")
-		
-		print(file)
-		print(1)
 	]]
 	
 	thread = love.thread.newThread(code)

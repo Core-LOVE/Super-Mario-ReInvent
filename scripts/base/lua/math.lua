@@ -1,3 +1,11 @@
+function math.lerp(a,b,t) 
+	return a + (b-a) * 0.5 * t 
+end
+
+function math.sign(n)
+	return (n > 0 and 1) or (n == 0 and 0) or -1
+end
+
 function math.clamp(a, b, c)
 	-- MrDoubleA, please don't kill me, this is the most perfomant way to clamp ._.
 	

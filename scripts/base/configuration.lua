@@ -1,14 +1,14 @@
 Configuration = {}
 
 local function checkPath(path)
-	if nfs.read(path) ~= nil then
+	if nfs.getInfo(path) ~= nil then
 		return path
 	end
 end
 
 local open = function(path)
 	local c = Level.current
-	local path = checkPath(c.levelFolder .. path) or checkPath(c.fileFolder .. path) or checkPath(_PATH .. path) or checkPath(path)
+	local path = checkPath(c.levelFolder .. path) or checkPath(c.fileFolder .. path) or checkPath(_PATH .. path)
 	
 	return path
 end
@@ -30,12 +30,10 @@ Configuration.create = function(name, t)
 		end
 		
 		if path then
-			if nfs.getInfo(path) then
-				local fields = txt.load(path)
-				
-				for k,v in pairs(fields) do
-					custom[k] = v
-				end
+			local fields = txt.load(path)
+			
+			for k,v in pairs(fields) do
+				custom[k] = v
 			end
 		end
 		

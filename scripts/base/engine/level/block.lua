@@ -47,9 +47,12 @@ block.config = Configuration.create('block', {
 	noicebrick = false,
 	bounceside = false,
 	diggable = false,
+	
 	frames = 1,
 	framespeed = 8,
+	
 	foreground = false,
+	disablerender = false,
 })
 
 local frame = {}
@@ -115,15 +118,17 @@ function block:render(arg)
 	arg.id = arg.id or v.id
 	arg.x = arg.x or v.x
 	arg.y = arg.y or v.y
-	arg.priority = arg.priority or RENDER_PRIORITY.BLOCK
-	arg.opacity = arg.opacity or 1
-	arg.sceneCoords = arg.sceneCoords or true
 	arg.width = arg.width or v.width
 	arg.height = arg.height or v.height
 	
 	if not Game.isColliding(arg.x, arg.y, arg.width, arg.height) then return end
 
 	local config = block.config[arg.id]
+	
+	arg.priority = arg.priority or RENDER_PRIORITY.BLOCK
+	arg.opacity = arg.opacity or 1
+	arg.sceneCoords = arg.sceneCoords or true
+	arg.priority = (config.priority) or (config.foreground and RENDER_PRIORITY.FOREGROUND_BLOCK) or (config.sizable and RENDER_PRIORITY.SIZEABLE) or RENDER_PRIORITY.BLOCK
 	
 	blockFrame[arg.id] = blockFrame[arg.id] or 0
 	blockFrameTimer[arg.id] = blockFrameTimer[arg.id] or 0
@@ -141,9 +146,19 @@ function block:render(arg)
 	end
 end
 
+function block.getFrame(id)
+	return blockFrame[id]
+end
+
+function block.setFrame(id, val)
+	blockFrame[id] = val
+end
+
 function block.internalDraw()
 	for k,v in ipairs(block) do
-		v:render()
+		if not block.config[v.id].disablerender then
+			v:render()
+		end
 	end
 end
 
