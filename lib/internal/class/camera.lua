@@ -95,7 +95,7 @@ do
 	end
 end
 
-function Camera.onTick()
+function Camera.onTick(dt)
 	checkCameraType()
 	
 	for k,v in ipairs(Camera) do

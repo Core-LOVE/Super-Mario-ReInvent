@@ -1,0 +1,3 @@
+local Color = {}
+
+return Color

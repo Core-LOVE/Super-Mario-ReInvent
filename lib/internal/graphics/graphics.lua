@@ -62,7 +62,7 @@ setmetatable(Graphics.sprites, {__index = function(self, key)
 end})
 
 local function addToCache(t)
-	local t = table.copy(t)
+	local t = t or {}
 	
 	t.scene = t.scene or t.sceneCoords or false
 	t.targetCamera = t.targetCamera or t.camera or 0
@@ -142,6 +142,15 @@ Graphics.lines = Graphics.line
 
 function Graphics.circle(t)
 	local t = addToCache(t)
+
+	t.mode = t.mode or 'fill'
+	
+	t.lineWidth = t.lineWidth or 1
+	t.smooth = t.smooth or false
+	
+	t.x = t.x or t[1]
+	t.y = t.y or t[2]
+	t.radius = t.radius or t.rad or t[3]
 	
 	t.type = 'circle'
 	
@@ -189,6 +198,16 @@ do
 		love.graphics.setLineWidth(v.lineWidth)
 		
 		love.graphics.rectangle(v.mode, v.x + x, v.y + y, v.width, v.height)
+		
+		love.graphics.setLineWidth(1)
+		love.graphics.setLineStyle('rough')
+	end
+	
+	render.circle = function(v, x, y)
+		love.graphics.setLineStyle((v.smooth and 'smooth') or 'rough')
+		love.graphics.setLineWidth(v.lineWidth)
+		
+		love.graphics.circle(v.mode, v.x + x, v.y + y, v.radius)
 		
 		love.graphics.setLineWidth(1)
 		love.graphics.setLineStyle('rough')
