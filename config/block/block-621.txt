@@ -1,2 +1,0 @@
-melt = true
-meltblock = 109

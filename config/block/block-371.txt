@@ -1,3 +1,0 @@
-lava = true
-frames = 8
-framespeed = 6

@@ -1,2 +1,0 @@
-explodable = true
-destroyeffect = 135

@@ -1,2 +1,0 @@
-semisolid = true
-diggable = true

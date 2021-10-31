@@ -1,2 +1,0 @@
-jumphurt = true
-framespeed = 4

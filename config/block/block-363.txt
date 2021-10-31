@@ -1,1 +1,0 @@
-ceilingslope = -1

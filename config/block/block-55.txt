@@ -1,3 +1,0 @@
-bounce = true
-frames = 4
-framespeed = 8

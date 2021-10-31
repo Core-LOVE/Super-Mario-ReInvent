@@ -1,3 +1,0 @@
-floorslope = 1
-width = 128
-height = 32

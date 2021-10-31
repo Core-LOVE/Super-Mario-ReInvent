@@ -1,5 +1,0 @@
-grabside = true
-jumphurt = true
-nohurt = true
-frames=5
-framespeed=4

@@ -1,4 +1,0 @@
-lava = true
-ceilingslope = -1
-frames = 4
-framespeed = 8

@@ -1,2 +1,0 @@
-ismushroom = true
-frames=1

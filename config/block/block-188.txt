@@ -1,3 +1,0 @@
-smashable = true
-destroyeffect = 51
-transform = 192

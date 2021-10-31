@@ -1,3 +1,0 @@
-hurts = true
-frames = 8
-framespeed = 4
