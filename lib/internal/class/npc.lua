@@ -10,14 +10,28 @@ do
 			luafiles[id] = true
 			
 			--load lua file
-			local g = table.copy(_G)
-			g.NPC_ID = id
+			NPC_ID = id
 			
-			setfenv(1, g)
 			require(name)
-			setfenv(1, _G)
+			
+			NPC_ID = nil
 		end
 	end
+end
+
+do
+	local config = require 'configuration'
+	NPC.config = config('npc', {
+		width = 32,
+		height = 32,
+		gfxwidth = 32,
+		gfxheight = 32,
+		
+		frames = 0,
+		framespeed = 8,
+		
+		jumphurt = true,
+	})
 end
 
 local function returnToSpawnPosition(v)
@@ -38,14 +52,33 @@ local function returnToSpawnPosition(v)
 	v.id = v.spawnId
 end
 
+function NPC.setSettings(config)
+	local id = config.id	
+	local default = NPC.config[id]
+	
+	local nt = table.copy(config)
+	nt.id = nil
+	
+	NPC.config[id] = table.deepmerge(default, nt)
+end
+
 function NPC.spawn(id, x, y, sect_num, respawn, centred)
 	local v = {}
-	
+
 	v.isValid = true
 	v.idx = #NPC + 1
 	v.id = id
+	
+	local cfg = NPC.config[v.id]
+	
 	v.x = x
 	v.y = y
+	v.width = cfg.width
+	v.height = cfg.height
+	v.speedX = 0
+	v.speedY = 0
+	v.direction = -1
+	
 	v.section = sect_num or 1
 	v.respawn = respawn or false
 	
@@ -76,21 +109,126 @@ function NPC:render(args)
 	local p = v.params
 	local args = args or {}
 	
+	local id = args.id or v.id
+	local cfg = NPC.config[id]
+	
+	local texture = args.texture or Graphics.sprites.npc[id]
+	
 	Graphics.draw{
-		texture = Graphics.sprites.npc[v.id],
+		texture = texture,
 		
-		x = (v.x or args.x) + p.xOffset,
-		y = (v.y or args.y) + p.yOffset,
+		x = (args.x or v.x) + p.xOffset,
+		y = (args.y or v.y) + p.yOffset,
 		
-		opacity = args.opacity or p.opacity,
+		sourceWidth = cfg.gfxwidth,
+		sourceHeight = cfg.gfxheight,
+		sourceY = cfg.gfxheight * v.frame,
+		
+		opacity = args.opacity or cfg.opacity or p.opacity,
 
 		scene = (args.scene == nil and true) or args.scene,
 		targetCamera = args.targetCamera or 0,
 	}
+	
+	-- Graphics.rect{
+		-- x = v.x,
+		-- y = v.y,
+		-- width = v.width,
+		-- height = v.height,
+		
+		-- scene = true,
+	-- }
+end
+
+local min = math.min
+
+local function animation(v)
+	local config = NPC.config[v.id]
+
+	if(config.frames > 0) then
+		v.frameTimer = v.frameTimer + 1
+		if(config.framestyle == 2 and (v.projectile ~= 0 or v.holdingPlayer > 0)) then
+			v.frameTimer = v.frameTimer + 1
+		end
+		if(v.frameTimer >= config.framespeed) then
+			if(config.framestyle == 0) then
+				v.frame = v.frame + 1 * v.direction
+			else
+				v.frame = v.frame + 1
+			end
+			v.frameTimer = 0
+		end
+		if(config.framestyle == 0) then
+			if(v.frame >= config.frames) then
+				v.frame = 0
+			end
+			if(v.frame < 0) then
+				v.frame = config.frames - 1
+			end
+		elseif(config.framestyle == 1) then
+			if(v.direction == -1) then
+				if(v.frame >= config.frames) then
+					v.frame = 0
+				end
+				if(v.frame < 0) then
+					v.frame = config.frames
+				end
+			else
+				if(v.frame >= config.frames * 2) then
+					v.frame = config.frames
+				end
+				if(v.frame < config.frames) then
+					v.frame = config.frames
+				end
+			end
+		elseif(config.framestyle == 2) then
+			if(v.holdingPlayer == 0 and v.projectile == 0) then
+				if(v.direction == -1) then
+					if(v.frame >= config.frames) then
+						v.frame = 0
+					end
+					if(v.frame < 0) then
+						v.frame = config.frames - 1
+					end
+				else
+					if(v.frame >= config.frames * 2) then
+						v.frame = config.frames
+					end
+					if(v.frame < config.frames) then
+						v.frame = config.frames * 2 - 1
+					end
+				end
+			else
+				if(v.direction == -1) then
+					if(v.frame >= config.frames * 3) then
+						v.frame = config.frames * 2
+					end
+					if(v.frame < config.frames * 2) then
+						v.frame = config.frames * 3 - 1
+					end
+				else
+					if(v.frame >= config.frames * 4) then
+						v.frame = config.frames * 3
+					end
+					if(v.frame < config.frames * 3) then
+						v.frame = config.frames * 4 - 1
+					end
+				end
+			end
+		end
+	end
 end
 
 function NPC:onPhysics()
 	local v = self
+	local cfg = NPC.config[v.id]
+	
+	v.x = v.x + v.speedX
+	v.y = v.y + v.speedY
+	
+	-- if not cfg.nogravity then
+		-- v.speedY = min(v.speedY + (v.gravity or cfg.gravity or Defines.npc_grav), v.maxgravity or cfg.maxgravity or Defines.gravity)
+	-- end
 end
 
 function NPC.onDraw()
@@ -101,6 +239,7 @@ end
 
 function NPC.onTick()
 	for k,v in ipairs(NPC) do
+		animation(v)
 		v:onPhysics()
 	end
 end

@@ -65,30 +65,30 @@ function table.imerge(t1, t2)
 end
 
 function table.deepmerge(t1, t2)
-	local t2 = table.deepCopy(t2)
-	local nt = table.deepCopy(t1)
+	local t2 = table.deepcopy(t2)
+	local nt = table.deepcopy(t1)
 	
 	for k,v in pairs(t2) do
 		nt[k] = v
 	end
 	
-	local mt1 = getmetatable(nt)
-	local mt2 = getmetatable(t2)
+	local mt1 = getmetatable(nt) or {}
+	local mt2 = getmetatable(t2) or {}
 	
 	setmetatable(nt, table.merge(mt1, mt2))
 	return nt
 end
 
 function table.ideepmerge(t1, t2)
-	local t2 = table.deepCopy(t2)
-	local nt = table.deepCopy(t1)
+	local t2 = table.deepcopy(t2)
+	local nt = table.deepcopy(t1)
 	
 	for k,v in ipairs(t2) do
 		nt[k] = v
 	end
 	
-	local mt1 = getmetatable(nt)
-	local mt2 = getmetatable(t2)
+	local mt1 = getmetatable(nt) or {}
+	local mt2 = getmetatable(t2) or {}
 	
 	setmetatable(nt, table.merge(mt1, mt2))
 	return nt

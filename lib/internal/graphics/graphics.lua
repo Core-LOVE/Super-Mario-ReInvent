@@ -102,6 +102,15 @@ function Graphics.draw(t)
 	t.shearX = t.shearX or 0
 	t.shearY = t.shearY or 0
 	
+	if t.sourceX ~= 0 or t.sourceY ~= 0 or t.sourceWidth ~= 0 or t.sourceHeight ~= 0 then
+		t.sourceX = t.sourceX or 0
+		t.sourceY = t.sourceY or 0
+		t.sourceWidth = t.sourceWidth or t.image:getWidth()
+		t.sourceHeight = t.sourceHeight or t.image:getHeight()
+		
+		t.quad = love.graphics.newQuad(t.sourceX, t.sourceY, t.sourceWidth, t.sourceHeight, t.image:getDimensions())
+	end
+	
 	t.type = 'image'
 	
 	return t
@@ -182,7 +191,11 @@ do
 			end
 		end
 	
-		love.graphics.draw(v.image, v.x + x, v.y + y, math.rad(v.rotation), v.scaleX, v.scaleY, v.alignX, v.alignY, v.shearX, v.shearY)
+		if v.quad then
+			love.graphics.draw(v.image, v.quad, v.x + x, v.y + y, math.rad(v.rotation), v.scaleX, v.scaleY, v.alignX, v.alignY, v.shearX, v.shearY)
+		else
+			love.graphics.draw(v.image, v.x + x, v.y + y, math.rad(v.rotation), v.scaleX, v.scaleY, v.alignX, v.alignY, v.shearX, v.shearY)
+		end
 		
 		if v.shader then
 			love.graphics.setShader()

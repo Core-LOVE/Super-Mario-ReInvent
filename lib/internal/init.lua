@@ -13,23 +13,28 @@ require 'lua/table'
 require 'lua/math'
 require 'lua/string'
 
+--parser
+ini = require 'parser/ini'
+txt = require 'parser/txt'
+
 --important
 libManager = require('internal/libManager')
 
 --engine
 require 'run'
+Engine = require('engine')
+Defines = require('defines')
 Graphics = require('graphics/graphics')
 
 --classes and etc
 Camera = require("class/camera")
-Camera.type = CAMTYPE.HORZ1 --purely for testing purposes
+--Camera.type = CAMTYPE.HORZ1 --purely for testing purposes
 NPC = require("class/npc")
-NPC.spawn(1, 0, 0)
-NPC.spawn(1, 32, 0)
-NPC.spawn(1, 64, 0)
-NPC.spawn(1, 96, 0)
-NPC.spawn(1, 128, 0)
-NPC.spawn(1, 160, 0)
+Block = require("class/block")
+
+local v = NPC.spawn(1, 0, 0)
+
+Block.spawn(1, 0, 96)
 
 function onGlobalDraw()
 	libManager.callEvent('onDraw')
@@ -42,6 +47,15 @@ function onGlobalDraw()
 end
 
 function onGlobalTick(dt)
+	local fps = 1 / Engine.FPS
+	Engine.buffer = Engine.buffer + dt
+	
+	if Engine.buffer > fps then
+		Engine.buffer = Engine.buffer - fps
+	else
+		return
+	end
+	
 	libManager.callEvent('onTick', dt)
 	libManager.callEvent('onTickEnd', dt)
 	
