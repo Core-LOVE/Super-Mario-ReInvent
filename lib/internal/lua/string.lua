@@ -37,64 +37,21 @@ function string.random(len, t)
 end
 
 --TOTALLY DIDN'T TAKE IT FROM SMBX2
-local string_byte = string.byte
-local string_sub = string.sub
-local string_gsub = string.gsub
-local table_insert = table.insert
-	
---Trim trailing and leading whitespace
 function string.trim(s)
-	return string_gsub(s, "^%s*(.-)%s*$", "%1")
+	return string.gsub(s, "^%s*(.-)%s*$", "%1")
 end
+---
 
---Split a string on a pattern into a table of strings
-function string.split(s, p, exclude, plain)
-	if  exclude == nil  then  exclude = false; end;
-	if  plain == nil  then  plain = true; end;
-
-	local t = {};
-	local i = 0;
-   
-	if(#s <= 1) then
-		return {s};
-	end
-   
-	while true do
-		local ls,le = s:find(p, i, plain);	--find next split pattern
-		if (ls ~= nil) then
-			table_insert(t, string_sub(s, i,le-1));
-			i = ls+1;
-			if  exclude  then
-				i = le+1;
-			end
-		else
-			table_insert(t, string_sub(s, i));
-			break;
-		end
-	end
-	
-	return t;
-end
-
---Compare two strings
-function string.compare(left, right)
-	if left == right then
-		return 0
-	else
-		local i = 1
-		while true do
-			local a = string_byte(left, i)
-			local b = string_byte(right, i)
-			if b == nil then --left is longer than right
-				return 1
-			elseif a == nil then --right is longer than left
-				return -1
-			elseif a > b then --left is lexically greater than right
-				return 1
-			elseif b > a then --right is lexically greater than left
-				return -1
-			end
-			i = i + 1
-		end
-	end
+function string.explode(str, div)
+    assert(type(str) == "string" and type(div) == "string", "invalid arguments")
+    local o = {}
+    while true do
+        local pos1,pos2 = str:find(div)
+        if not pos1 then
+            o[#o+1] = str
+            break
+        end
+        o[#o+1],str = str:sub(1,pos1-1),str:sub(pos2+1)
+    end
+    return o
 end

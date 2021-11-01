@@ -1,6 +1,17 @@
 local Graphics = {}
 local queqe = {}
 
+Color = require 'graphics/color'
+-- local push = require 'ext/push'
+
+-- do
+	-- local gameWidth, gameHeight = Engine.getResolution() --fixed game resolution
+	-- local windowWidth, windowHeight = love.window.getDesktopDimensions()
+	-- windowWidth, windowHeight = windowWidth*.7, windowHeight*.7 --make the window a bit smaller than the screen itself
+
+	-- push:setupScreen(gameWidth, gameHeight, windowWidth, windowHeight, {fullscreen = false})
+-- end
+
 PRIORITY = {
 	BG_COLOR = -101,
 	LEVEL_BG = -100,
@@ -228,10 +239,10 @@ do
 	
 	render.line = function(v, x, y)
 		for amount = 1, #v do
-			local num = (amount - 1) % 2
+			local num = amount % 3
 			local val = v[amount]
 			
-			if num == 0 then
+			if num == 1 then
 				val = val + x
 			else
 				val = val + y
@@ -259,8 +270,13 @@ do
 		end
 	end
 	
+	local tablesort = table.sort
+	local min = math.min
+	
 	function Graphics.onDraw()
-		table.sort(queqe, sort)
+		tablesort(queqe, sort)
+		
+		-- push:start()
 		
 		for k = 1, #queqe do
 			local v = queqe[k]
@@ -288,6 +304,8 @@ do
 			love.graphics.setColor(1,1,1,1)
 		end
 		
+		-- push:finish()
+		
 		queqe = {}
 	end
 end
@@ -304,10 +322,15 @@ function Graphics.loadShader(name)
 	return Graphics.newShader(code)
 end
 
+function Graphics.onWindowResize(w, h)
+  -- return push:resize(w, h)
+end
+
 function Graphics.onInit()
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	
 	registerFunction(Graphics, 'onDraw')
+	registerFunction(Graphics, 'onWindowResize')
 end
 
 return Graphics

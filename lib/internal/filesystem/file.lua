@@ -10,7 +10,14 @@ end
 
 do
 	local function exists(name)
-		return fs:isFile(name)
+		local does = io.open(name)
+		
+		if does then
+			return true
+		end
+		
+		return false
+		-- return fs:isFile(name)
 	end
 	
 	function File.exists(name, userplaces)
@@ -21,7 +28,9 @@ do
 		}
 		
 		if userplaces then
-			for k,v in ipairs(userplaces) do
+			for k = 1, #userplaces do
+				local v = userplaces[k]
+				
 				places[#places + 1] = places[1] .. v
 				places[#places + 1] = places[2] .. v
 				places[#places + 1] = places[3] .. v
@@ -30,7 +39,8 @@ do
 		
 		local filename
 		
-		for k,v in ipairs(places) do
+		for k = 1, #places do
+			local v = places[k]
 			local s = exists(v .. name)
 			
 			if s then

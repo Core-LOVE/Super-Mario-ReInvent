@@ -28,15 +28,22 @@ Graphics = require('graphics/graphics')
 
 --classes and etc
 Camera = require("class/camera")
---Camera.type = CAMTYPE.HORZ1 --purely for testing purposes
+Camera.type = CAMTYPE.HORZ1 --purely for testing purposes
 NPC = require("class/npc")
 Block = require("class/block")
 
-local v = NPC.spawn(1, 0, 0)
-
-Block.spawn(1, 0, 96)
 
 function onGlobalDraw()
+	Graphics.draw{
+		image = Graphics.sprites.background2[1],
+		
+		x = 0,
+		y = 0,
+		priority = 0,
+		
+		scene = true,
+	}
+	
 	libManager.callEvent('onDraw')
 	libManager.callEvent('onDrawEnd')
 	
@@ -62,4 +69,8 @@ function onGlobalTick(dt)
 	for k,v in ipairs(Camera) do
 		libManager.callEvent('onCameraUpdate', v)
 	end
+end
+
+function love.resize(w, h)
+	libManager.callEvent('onWindowResize', w, h)
 end

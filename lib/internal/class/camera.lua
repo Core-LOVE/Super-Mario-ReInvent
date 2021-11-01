@@ -9,6 +9,8 @@ CAMTYPE = {
 }
 
 Camera.type = CAMTYPE.DEFAULT
+local previousType = CAMTYPE.DEFAULT
+
 Camera.drawDividingLines = true
 
 function Camera.spawn(x, y, w, h)
@@ -90,7 +92,13 @@ do
 		if not c or not c2 then return end
 
 		if types[Camera.type] then
-			return types[Camera.type](c, c2)
+			types[Camera.type](c, c2)
+		end
+		
+		if previousType ~= Camera.type then
+			c.canvas = love.graphics.newCanvas(c.width, c.height)
+			c2.canvas = love.graphics.newCanvas(c2.width, c2.height)
+			previousType = Camera.type
 		end
 	end
 end
@@ -111,7 +119,15 @@ function Camera.onDraw()
 	
 	if not c or not c2 then return end
 
-	
+	if Camera.type == CAMTYPE.HORZ1 or Camera.type == CAMTYPE.HORZ2 then
+		Graphics.box{
+			400,0,2,600,
+			
+			width = 2,
+			priority = 6,
+			color = Color.black,
+		}
+	end
 end
 
 function Camera.onInit()
