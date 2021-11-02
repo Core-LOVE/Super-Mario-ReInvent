@@ -184,12 +184,14 @@ do
 	
 	local render = {}
 	
+	local rad = math.rad
+	
 	render.image = function(v, x, y)
 		local dm
 		
 		if v.wrapMode then
 			dm = v.image:getWrap()
-			v.image:setWrap(dm)
+			v.image:setWrap(v.wrapMode)
 		end
 		
 		if v.shader then
@@ -203,9 +205,9 @@ do
 		end
 	
 		if v.quad then
-			love.graphics.draw(v.image, v.quad, v.x + x, v.y + y, math.rad(v.rotation), v.scaleX, v.scaleY, v.alignX, v.alignY, v.shearX, v.shearY)
+			love.graphics.draw(v.image, v.quad, v.x + x, v.y + y, rad(v.rotation), v.scaleX, v.scaleY, v.alignX, v.alignY, v.shearX, v.shearY)
 		else
-			love.graphics.draw(v.image, v.x + x, v.y + y, math.rad(v.rotation), v.scaleX, v.scaleY, v.alignX, v.alignY, v.shearX, v.shearY)
+			love.graphics.draw(v.image, v.x + x, v.y + y, rad(v.rotation), v.scaleX, v.scaleY, v.alignX, v.alignY, v.shearX, v.shearY)
 		end
 		
 		if v.shader then
@@ -303,7 +305,6 @@ do
 			love.graphics.setBlendMode('alpha')
 			love.graphics.setColor(1,1,1,1)
 		end
-		
 		-- push:finish()
 		
 		queqe = {}

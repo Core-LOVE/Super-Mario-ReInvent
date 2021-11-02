@@ -26,17 +26,23 @@ function Color.new(r, g, b, a)
 	return args
 end
 
-function Color.hex(hc)
-	local r = tn(str, 1, 2)
-	local g = tn(str, 3, 4)
-	local b = tn(str, 5, 6)
-	local a = 1
-	
-	if #str > 6 then
-		a = tn(str, 7, 8)
+do
+	local tn = function(str, f, s)
+		return tonumber('0x' .. str:sub(f, s)) / 255
 	end
 	
-	return Color.new(r, g, b, a)
+	function Color.hex(str)
+		local r = tn(str, 1, 2)
+		local g = tn(str, 3, 4)
+		local b = tn(str, 5, 6)
+		local a = 1
+		
+		if #str > 6 then
+			a = tn(str, 7, 8)
+		end
+		
+		return Color.new(r, g, b, a)
+	end
 end
 
 local colors = {}

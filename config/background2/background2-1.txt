@@ -1,0 +1,17 @@
+[main]
+test = true
+fillcolor=6898F8
+
+[ground]
+img=1
+paralX = 0.5
+repeatX = true
+alignY=BOTTOM
+
+[clouds]
+img=2
+paralX = 0.25
+repeatX = true
+y=-500
+alignY=BOTTOM
+speedX = 0.3

@@ -27,23 +27,17 @@ Defines = require('defines')
 Graphics = require('graphics/graphics')
 
 --classes and etc
+Background = require("class/background")
+Section = require("class/section")
+Section.spawn(0, 0, 1600, 1200)
 Camera = require("class/camera")
-Camera.type = CAMTYPE.HORZ1 --purely for testing purposes
+-- Camera.type = CAMTYPE.VERT1 --purely for testing purposes
 NPC = require("class/npc")
 Block = require("class/block")
 
+NPC.spawn(1, 0,0)
 
 function onGlobalDraw()
-	Graphics.draw{
-		image = Graphics.sprites.background2[1],
-		
-		x = 0,
-		y = 0,
-		priority = 0,
-		
-		scene = true,
-	}
-	
 	libManager.callEvent('onDraw')
 	libManager.callEvent('onDrawEnd')
 	
@@ -65,6 +59,20 @@ function onGlobalTick(dt)
 	
 	libManager.callEvent('onTick', dt)
 	libManager.callEvent('onTickEnd', dt)
+	
+	local s = 3
+	
+	if love.keyboard.isDown('right') then
+		camera.x = camera.x + s
+	elseif love.keyboard.isDown('left') then
+		camera.x = camera.x - s
+	end
+	
+	if love.keyboard.isDown('up') then
+		camera.y = camera.y - s
+	elseif love.keyboard.isDown('down') then
+		camera.y = camera.y + s
+	end
 	
 	for k,v in ipairs(Camera) do
 		libManager.callEvent('onCameraUpdate', v)

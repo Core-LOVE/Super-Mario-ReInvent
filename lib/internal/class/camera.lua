@@ -7,15 +7,19 @@ CAMTYPE = {
 	HORZ2 = 3,
 	VERT2 = 4,
 }
+CAMTYPE.HORZ = CAMTYPE.HORZ1
+CAMTYPE.VERT = CAMTYPE.VERT1
 
 Camera.type = CAMTYPE.DEFAULT
 local previousType = CAMTYPE.DEFAULT
 
 Camera.drawDividingLines = true
+Camera.division = true
 
 function Camera.spawn(x, y, w, h)
 	local v = {}
 	
+	v.idx = #Camera + 1
 	v.x = 0
 	v.y = 0
 	v.renderX = x or 0
@@ -123,7 +127,15 @@ function Camera.onDraw()
 		Graphics.box{
 			400,0,2,600,
 			
-			width = 2,
+			priority = 6,
+			color = Color.black,
+		}
+	else
+		if Camera.type == CAMTYPE.DEFAULT then return end
+		
+		Graphics.box{
+			0, 300, 800, 2,
+			
 			priority = 6,
 			color = Color.black,
 		}

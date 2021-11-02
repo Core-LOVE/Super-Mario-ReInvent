@@ -10,13 +10,7 @@ end
 
 do
 	local function exists(name)
-		local does = io.open(name)
-		
-		if does then
-			return true
-		end
-		
-		return false
+		return (io.open(name) and true) or false
 		-- return fs:isFile(name)
 	end
 	
@@ -45,6 +39,7 @@ do
 			
 			if s then
 				filename = v .. name
+				break
 			end
 		end
 		
