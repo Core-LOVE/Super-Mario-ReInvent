@@ -14,4 +14,3 @@ paralX = 0.25
 repeatX = true
 y=-500
 alignY=BOTTOM
-speedX = 0.3

@@ -29,8 +29,9 @@ Graphics = require('graphics/graphics')
 --classes and etc
 Background = require("class/background")
 Section = require("class/section")
-Section.spawn(0, 0, 1600, 1200)
+local v = Section.spawn(0, 0, 1600, 1200)
 Camera = require("class/camera")
+camera.y = v.y + v.height - camera.height
 -- Camera.type = CAMTYPE.VERT1 --purely for testing purposes
 NPC = require("class/npc")
 Block = require("class/block")

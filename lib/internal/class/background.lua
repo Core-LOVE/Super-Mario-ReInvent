@@ -9,11 +9,20 @@ LEFT = 0
 RIGHT = 1
 
 do
+	local cache = {}
+	
+	setmetatable(cache, {__index = function(self, name)
+		rawset(self, name, Graphics.loadImage(name))
+		return rawget(self, name)
+	end})
+	
 	local function renderLayer(section, layer, cam)
 		local img
 		
 		if type(layer.img) == 'number' then
 			img = Graphics.sprites.background2[layer.img]
+		else
+			img = cache[layer.image]
 		end
 		
 		local x = section.x + (section.width - img:getWidth()) * layer.alignX
@@ -28,16 +37,16 @@ do
 		Graphics.draw{
 			image = img,
 			
-			x = x + layer.x,
-			y = y + layer.y,
+			x = x + layer.x + ((not layer.repeatX and (cx + layer.realSX)) or 0),
+			y = y + layer.y + ((not layer.repeatX and (cx + layer.realSY)) or 0),
 			
 			sourceWidth = (layer.repeatX and section.width),
 			sourceHeight = (layer.repeatY and section.height),
 			
 			wrapMode = layer.wrapMode or 'repeat',
 			
-			sourceX = (cx + layer.realSX) % img:getWidth(),
-			sourceY = (cy + layer.realSY) % img:getHeight(),
+			sourceX = layer.repeatX and ((cx + layer.realSX) % img:getWidth()),
+			sourceY = layer.repeatY and ((cy + layer.realSY) % img:getHeight()),
 			
 			targetCamera = cam.idx,
 			scene = true,
