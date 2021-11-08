@@ -8,10 +8,18 @@ File = require('lib/internal/filesystem/file')
 --lua
 utf8 = rawrequire 'utf8'
 bit = rawrequire 'bit'
+jit = rawrequire 'jit'
 vector = require 'lua/vector'
 require 'lua/table'
 require 'lua/math'
 require 'lua/string'
+require 'lua/coroutine'
+require 'lua/thread'
+require 'lua/channel'
+
+-- local t = thread.run[[
+	-- print 'e'
+-- ]]
 
 --parser
 ini = require 'parser/ini'
@@ -25,20 +33,34 @@ require 'run'
 Engine = require('engine')
 Defines = require('defines')
 Graphics = require('graphics/graphics')
+Sprite = require('graphics/sprite')
 
 --classes and etc
 Background = require("class/background")
 Section = require("class/section")
-local v = Section.spawn(0, 0, 1600, 1200)
+Section.spawn(0, 0, 1600, 1200)
 Camera = require("class/camera")
-camera.y = v.y + v.height - camera.height
+
 -- Camera.type = CAMTYPE.VERT1 --purely for testing purposes
 NPC = require("class/npc")
 Block = require("class/block")
 
 NPC.spawn(1, 0,0)
 
+local time = Engine.getTime()
+
+function onGlobalLoad()
+	time = Engine.getTime()
+end
+
 function onGlobalDraw()
+	local currentTime = Engine.getTime()
+	if time <= currentTime then
+		time = currentTime
+	end
+	
+	love.timer.sleep(time - currentTime)
+	
 	libManager.callEvent('onDraw')
 	libManager.callEvent('onDrawEnd')
 	
@@ -50,13 +72,7 @@ end
 
 function onGlobalTick(dt)
 	local fps = 1 / Engine.FPS
-	Engine.buffer = Engine.buffer + dt
-	
-	if Engine.buffer > fps then
-		Engine.buffer = Engine.buffer - fps
-	else
-		return
-	end
+	time = time + fps
 	
 	libManager.callEvent('onTick', dt)
 	libManager.callEvent('onTickEnd', dt)

@@ -91,7 +91,15 @@ do
 		'lib/internal/',
 		'lib/base/',
 	}
-
+	
+	function File.findFormat(name)
+		return name:find "[^.]+$"
+	end
+	
+	function File.findName(name)
+		return name:find "[^/]+$"
+	end
+	
 	function File.require(name)
 		if not package.loaded[name] then
 			local n = File.exists(name .. '.lua', File.requirePaths)

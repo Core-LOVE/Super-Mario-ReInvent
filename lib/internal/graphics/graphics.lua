@@ -39,7 +39,7 @@ PRIORITY = {
 	BG_EFFECT = -60,
 	FOREGROUND_EFFECT = -5,
 	
-	DEFAULT = 1,
+	DEFAULT = 0,
 	TEXT = 3,
 	MESSAGE_ICON = -40,
 	HUD = 5,
@@ -85,6 +85,7 @@ local function addToCache(t)
 	t.priority = t.priority or t.z or t.depth or PRIORITY.DEFAULT
 	
 	t.color = t.color or t.col or {1,1,1,1}
+	t.opacity = t.opacity or t.alpha
 	if t.opacity then
 		t.color[4] = t.opacity
 	end

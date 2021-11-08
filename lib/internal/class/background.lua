@@ -50,6 +50,7 @@ do
 			
 			targetCamera = cam.idx,
 			scene = true,
+			priority = layer.priority or PRIORITY.LEVEL_BG,
 		}
 	end
 

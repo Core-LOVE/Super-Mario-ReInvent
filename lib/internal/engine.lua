@@ -1,6 +1,5 @@
 local Engine = {}
 Engine.FPS = 65
-Engine.buffer = 0
 
 Engine.widescreen = false
 Engine.resolution = {width = 800, height = 600}
@@ -12,6 +11,11 @@ end
 function Engine.getFPS()
 	return Engine.FPS
 end
+
+Engine.getRealFPS = love.timer.getFPS
+Engine.getTime = love.timer.getTime
+Engine.sleep = love.timer.sleep
+Engine.getDelta = love.timer.getDelta
 
 function Engine.setWindowSize(nw, nh, nf)
 	local w,h,flags = love.window.getMode()
