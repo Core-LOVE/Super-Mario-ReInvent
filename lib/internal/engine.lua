@@ -1,30 +1,25 @@
 local Engine = {}
-Engine.FPS = 65
+Engine.FPSCap = 65
+
+Engine.speed = 1
 
 Engine.widescreen = false
 Engine.resolution = {width = 800, height = 600}
 
-function Engine.setFPS(num)
-	Engine.FPS = num
+function Engine.setFPSCap(num)
+	Engine.FPSCap = num
 end
 
-function Engine.getFPS()
-	return Engine.FPS
+function Engine.getFPSCap()
+	return Engine.FPSCap
 end
 
 Engine.getRealFPS = love.timer.getFPS
 Engine.getTime = love.timer.getTime
 Engine.sleep = love.timer.sleep
-Engine.getDelta = love.timer.getDelta
 
-function Engine.setWindowSize(nw, nh, nf)
-	local w,h,flags = love.window.getMode()
-
-	return love.window.setMode(nw or w, nh or h, nf or flags)
-end
-
-function Engine.getResolution()
-	return Engine.resolution.width, Engine.resolution.height
+function Engine.getDelta()
+	return (love.timer.getDelta() * Engine.FPSCap) * Engine.speed 
 end
 
 return Engine

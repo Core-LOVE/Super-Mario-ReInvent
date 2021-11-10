@@ -17,10 +17,6 @@ require 'lua/coroutine'
 require 'lua/thread'
 require 'lua/channel'
 
--- local t = thread.run[[
-	-- print 'e'
--- ]]
-
 --parser
 ini = require 'parser/ini'
 txt = require 'parser/txt'
@@ -47,20 +43,7 @@ Block = require("class/block")
 
 NPC.spawn(1, 0,0)
 
-local time = Engine.getTime()
-
-function onGlobalLoad()
-	time = Engine.getTime()
-end
-
 function onGlobalDraw()
-	local currentTime = Engine.getTime()
-	if time <= currentTime then
-		time = currentTime
-	end
-	
-	love.timer.sleep(time - currentTime)
-	
 	libManager.callEvent('onDraw')
 	libManager.callEvent('onDrawEnd')
 	
@@ -69,26 +52,25 @@ function onGlobalDraw()
 		libManager.callEvent('onHUDDraw', v)
 	end
 end
+ 
+function onGlobalTick()
+	local dt = Engine.getDelta()
 
-function onGlobalTick(dt)
-	local fps = 1 / Engine.FPS
-	time = time + fps
-	
 	libManager.callEvent('onTick', dt)
 	libManager.callEvent('onTickEnd', dt)
 	
 	local s = 3
 	
 	if love.keyboard.isDown('right') then
-		camera.x = camera.x + s
+		camera.x = camera.x + (s * dt)
 	elseif love.keyboard.isDown('left') then
-		camera.x = camera.x - s
+		camera.x = camera.x - (s * dt)
 	end
 	
 	if love.keyboard.isDown('up') then
-		camera.y = camera.y - s
+		camera.y = camera.y - (s * dt)
 	elseif love.keyboard.isDown('down') then
-		camera.y = camera.y + s
+		camera.y = camera.y + (s * dt)
 	end
 	
 	for k,v in ipairs(Camera) do

@@ -142,13 +142,13 @@ end
 
 local min = math.min
 
-local function animation(v)
+local function animation(v, dt)
 	local config = NPC.config[v.id]
 
 	if(config.frames > 0) then
-		v.frameTimer = v.frameTimer + 1
+		v.frameTimer = v.frameTimer + dt
 		if(config.framestyle == 2 and (v.projectile ~= 0 or v.holdingPlayer > 0)) then
-			v.frameTimer = v.frameTimer + 1
+			v.frameTimer = v.frameTimer + dt
 		end
 		if(v.frameTimer >= config.framespeed) then
 			if(config.framestyle == 0) then
@@ -237,9 +237,9 @@ function NPC.onDraw()
 	end
 end
 
-function NPC.onTick()
+function NPC.onTick(dt)
 	for k,v in ipairs(NPC) do
-		animation(v)
+		animation(v, dt)
 		v:onPhysics()
 	end
 end
