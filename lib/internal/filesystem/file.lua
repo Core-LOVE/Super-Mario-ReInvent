@@ -4,9 +4,12 @@ File.levelPath = ""
 File.episodePath = ""
 File.gamePath = love.filesystem.getSource() .. '/'
 
+local ioopen = io.open
+local iolines = io.lines
+
 do
 	local function exists(name)
-		return (io.open(name) and true) or false
+		return (ioopen(name) and true) or false
 		-- return fs:isFile(name)
 	end
 	
@@ -46,7 +49,7 @@ end
 function File.open(name, mode)
 	local name = File.exists(name)
 
-	return io.open(name, mode or "r")
+	return ioopen(name, mode or "r")
 end
 
 function File.loadImage(name, paths)
@@ -72,7 +75,7 @@ end
 function File.lines(name)
 	local name = File.exists(name)
 	
-	return io.lines(name)
+	return iolines(name)
 end
 
 function File.load(name, mode)
@@ -111,6 +114,11 @@ do
 	function File.require(name)
 		if not package.loaded[name] then
 			local n = File.exists(name .. '.lua', File.requirePaths)
+			
+			if not n then
+				return error("module '" .. name .. "' not found")
+			end
+			
 			local lib = File.dofile(n)
 			
 			if type(lib) == 'table' and type(lib.onInit) == 'function' then

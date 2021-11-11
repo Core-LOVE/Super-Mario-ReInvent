@@ -26,9 +26,11 @@ local lib = {
 local vector = {}
 vector.__index = vector
 
--- get a random function from Love2d or base lua, in that order.
 local rand = math.random
-if love and love.math then rand = love.math.random end
+local sqrt = math.sqrt
+local atan2 = math.atan2
+local mathmin = math.min
+local mathmax = math.max
 
 -- makes a new vector
 local function new(x,y)
@@ -71,7 +73,7 @@ end
 
 -- get the magnitude of a vector
 function vector:getmag()
-  return math.sqrt(self.x^2 + self.y^2)
+  return sqrt(self.x^2 + self.y^2)
 end
 
 -- get the magnitude squared of a vector
@@ -139,7 +141,7 @@ end
 -- get the distance between two vectors
 function vector.dist(a,b)
   assert(isvector(a) and isvector(b), "dist: wrong argument types (expected <vector> and <vector>)")
-  return math.sqrt((a.x-b.x)^2 + (a.y-b.y)^2)
+  return sqrt((a.x-b.x)^2 + (a.y-b.y)^2)
 end
 
 -- return the dot product of the vector
@@ -170,21 +172,24 @@ end
 -- Clamp each axis between max and min's corresponding axis
 function vector:clamp(min, max)
   assert(isvector(min) and isvector(max), "clamp: wrong argument type (expected <vector>) and <vector>")
-  local x = math.min( math.max( self.x, min.x ), max.x )
-  local y = math.min( math.max( self.y, min.y ), max.y )
+  local x = mathmin( mathmax( self.x, min.x ), max.x )
+  local y = mathmin( mathmax( self.y, min.y ), max.y )
   self:set(x,y)
   return self
 end
 
 -- get the heading (direction) of a vector
 function vector:heading()
-  return -math.atan2(self.y, self.x)
+  return -atan2(self.y, self.x)
 end
+
+local sin = math.sin
+local cos = math.cos
 
 -- rotate a vector clockwise by a certain number of radians
 function vector:rotate(theta)
-  local s = math.sin(theta)
-  local c = math.cos(theta)
+  local s = sin(theta)
+  local c = cos(theta)
   local v = new(
                 (c * self.x) + (s * self.y),
                 -(s * self.x) + (c * self.y))

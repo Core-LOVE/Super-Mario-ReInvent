@@ -1,3 +1,8 @@
+local stringsub = string.sub
+local stringfind = string.find
+local stringgsub = string.gsub
+local random = math.random
+
 do
 	local upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	local lowerCase = "abcdefghijklmnopqrstuvwxyz"
@@ -8,20 +13,20 @@ do
 	
 	function string.randomchar(at)
 		if type(at) == 'boolean' then
-			local rand = math.random(#upperCase)
+			local rand = random(#upperCase)
 			
-			return string.sub(upperCase, rand, rand)
+			return stringsub(upperCase, rand, rand)
 		elseif type(at) == 'string' then
-			local limit = string.find(allCase, at)
-			local rand = math.random(limit)
+			local limit = stringfind(allCase, at)
+			local rand = random(limit)
 			
-			return string.sub(allCase, rand, rand)
+			return stringsub(allCase, rand, rand)
 		elseif type(at) == 'table' then
 			return table.irandom(at)
 		else
 			local rand = math.random(#allCase)
 			
-			return string.sub(allCase, rand, rand)
+			return stringsub(allCase, rand, rand)
 		end
 	end
 end
@@ -38,7 +43,7 @@ end
 
 --TOTALLY DIDN'T TAKE IT FROM SMBX2
 function string.trim(s)
-	return string.gsub(s, "^%s*(.-)%s*$", "%1")
+	return stringgsub(s, "^%s*(.-)%s*$", "%1")
 end
 ---
 

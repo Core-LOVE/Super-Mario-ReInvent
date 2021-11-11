@@ -1,4 +1,5 @@
 local Camera = {}
+Camera.__type = "Camera"
 
 CAMTYPE = {
 	DEFAULT = 0,

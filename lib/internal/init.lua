@@ -16,6 +16,8 @@ require 'lua/string'
 require 'lua/coroutine'
 require 'lua/thread'
 require 'lua/channel'
+require 'lua/functions'
+require 'lua/global'
 
 --parser
 ini = require 'parser/ini'
@@ -30,6 +32,7 @@ Engine = require('engine')
 Defines = require('defines')
 Graphics = require('graphics/graphics')
 Sprite = require('graphics/sprite')
+Collision = require('collision/collision')
 
 --classes and etc
 Background = require("class/background")
@@ -42,6 +45,12 @@ NPC = require("class/npc")
 Block = require("class/block")
 
 NPC.spawn(1, 0,0)
+
+for x = 0, 256, 32 do
+	Block.spawn(1, x, 256)
+end
+
+Block.spawn(299, 256 + 32, 256 - 32)
 
 function onGlobalDraw()
 	libManager.callEvent('onDraw')

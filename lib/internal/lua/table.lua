@@ -132,11 +132,13 @@ function table.find(t, val)
 	return nil;
 end
 
+local tableinsert = table.insert
+
 function table.ifindall(t, val)
 	local rt = {};
 	for k,v in ipairs(t) do
 		if(v == val) then
-			table.insert(rt,k);
+			tableinsert(rt,k);
 		end
 	end
 	return rt;
@@ -146,7 +148,7 @@ function table.findall(t, val)
 	local rt = {};
 	for k,v in pairs(t) do
 		if(v == val) then
-			table.insert(rt,k);
+			tableinsert(rt,k);
 		end
 	end
 	return rt;
@@ -159,10 +161,12 @@ end
 function table.contains(t, val)
 	return table.find(t, val) ~= nil;
 end
+
+local random = math.random
 	
 function table.ishuffle(t)
 	for i=#t,2,-1 do 
-		local j = rng.randomInt(1,i)
+		local j = random(1,i)
 		t[i], t[j] = t[j], t[i]
 	end
 	return t
@@ -179,7 +183,7 @@ end
 function table.unmap(t)
 	local t2 = {};
 	for k,_ in pairs(t) do
-		table.insert(t2,k);
+		tableinsert(t2,k);
 	end
 	return t2;
 end
@@ -201,7 +205,7 @@ function table.append(...)
 	local t = {};
 	for _,t1 in ipairs(ts) do
 		for _,v in ipairs(t1) do
-			table.insert(t,v);
+			tableinsert(t,v);
 		end
 	end
 	return t;
@@ -224,10 +228,10 @@ function table.flatten(t)
 	for _,v in ipairs(t) do
 		if(pcall(ipairs(v))) then
 			for _,v2 in ipairs(v) do
-				table.insert(t2, v2);
+				tableinsert(t2, v2);
 			end
 		else
-			table.insert(t2, v);
+			tableinsert(t2, v);
 		end
 	end
 	return t2;
@@ -239,7 +243,7 @@ function table.get(t, k)
 end
 
 function table.irandom(t, l, r)
-	return t[math.random(l or 1, r or #t)]
+	return t[random(l or 1, r or #t)]
 end
 
 function table.random(t, l, r)
@@ -248,7 +252,7 @@ function table.random(t, l, r)
 	
     for i, o in pairs(t) do
         n = n + 1
-        if math.random() < (1/n) then
+        if random() < (1/n) then
             choice = o      
         end
     end

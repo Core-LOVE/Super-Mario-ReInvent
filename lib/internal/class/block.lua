@@ -1,4 +1,5 @@
 local Block = {}
+Block.__type = "Block"
 
 do
 	local luafiles = {}
@@ -27,6 +28,8 @@ function Block.spawn(id, x, y)
 	v.id = id
 	v.x = x
 	v.y = y
+	v.width = 32
+	v.height = 32
 	
 	v.data = {}
 	

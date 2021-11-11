@@ -1,4 +1,5 @@
 local NPC = {}
+NPC.__type = "NPC"
 
 do
 	local luafiles = {}
@@ -77,7 +78,7 @@ function NPC.spawn(id, x, y, sect_num, respawn, centred)
 	v.height = cfg.height
 	v.speedX = 0
 	v.speedY = 0
-	v.direction = -1
+	v.direction = 1
 	
 	v.section = sect_num or 1
 	v.respawn = respawn or false
@@ -219,16 +220,20 @@ local function animation(v, dt)
 	end
 end
 
-function NPC:onPhysics()
+function NPC:onPhysics(dt)
 	local v = self
 	local cfg = NPC.config[v.id]
 	
-	v.x = v.x + v.speedX
-	v.y = v.y + v.speedY
+	if not cfg.nogravity then
+		v.speedY = min(v.speedY + (v.gravity or cfg.gravity or Defines.npc_grav), v.maxgravity or cfg.maxgravity or Defines.gravity)
+	end
 	
-	-- if not cfg.nogravity then
-		-- v.speedY = min(v.speedY + (v.gravity or cfg.gravity or Defines.npc_grav), v.maxgravity or cfg.maxgravity or Defines.gravity)
-	-- end
+	v.speedX = 1 * v.direction
+	
+	v.x = v.x + (v.speedX * dt)
+	v.y = v.y + (v.speedY * dt)
+	
+	Collision.update(v)
 end
 
 function NPC.onDraw()
@@ -240,7 +245,7 @@ end
 function NPC.onTick(dt)
 	for k,v in ipairs(NPC) do
 		animation(v, dt)
-		v:onPhysics()
+		v:onPhysics(dt)
 	end
 end
 
