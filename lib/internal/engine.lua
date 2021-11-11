@@ -18,8 +18,5 @@ Engine.getRealFPS = love.timer.getFPS
 Engine.getTime = love.timer.getTime
 Engine.sleep = love.timer.sleep
 
-function Engine.getDelta()
-	return (love.timer.getDelta() * Engine.FPSCap) * Engine.speed 
-end
-
+deltaTime = (love.timer.getDelta() * Engine.FPSCap) * Engine.speed 
 return Engine

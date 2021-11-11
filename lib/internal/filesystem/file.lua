@@ -2,11 +2,7 @@ local File = {}
 
 File.levelPath = ""
 File.episodePath = ""
-File.gamePath = love.filesystem.getSourceBaseDirectory()
-
-if not love.filesystem.isFused() then
-    File.gamePath = File.gamePath .. '/SMR/'
-end
+File.gamePath = love.filesystem.getSource() .. '/'
 
 do
 	local function exists(name)
@@ -59,6 +55,12 @@ function File.loadImage(name, paths)
 	return fs:loadImage(name)
 end
 
+function File.loadFont(name, size, paths)
+	local name = File.exists(name, paths)
+
+	return fs:loadFont(name, size or 12)
+end
+
 function File.read(name, mode)
 	local file = File.open(name, "r")
 	local content = file:read(mode or "*a")
@@ -98,6 +100,12 @@ do
 	
 	function File.findName(name)
 		return name:find "[^/]+$"
+	end
+	
+	function File.getFormat(name)
+		local find = File.findFormat(name)
+
+		return name:sub(find, #name)
 	end
 	
 	function File.require(name)

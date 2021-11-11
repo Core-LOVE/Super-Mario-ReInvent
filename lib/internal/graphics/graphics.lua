@@ -187,6 +187,10 @@ do
 	
 	local rad = math.rad
 	
+	render.richText = function(v, x, y)
+		
+	end
+	
 	render.image = function(v, x, y)
 		local dm
 		
@@ -322,6 +326,15 @@ function Graphics.loadShader(name)
 	local code = File.read(name)
 
 	return Graphics.newShader(code)
+end
+
+--Font stuff
+Graphics.loadFont = File.loadFont
+
+Graphics.richPrint = function(t)
+	local t = addToCache(t)
+	
+	t.type = 'richText'
 end
 
 function Graphics.onWindowResize(w, h)

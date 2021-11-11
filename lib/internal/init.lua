@@ -53,9 +53,10 @@ function onGlobalDraw()
 	end
 end
  
-function onGlobalTick()
-	local dt = Engine.getDelta()
-
+function onGlobalTick(dt)
+	deltaTime = (dt * Engine.FPSCap) * Engine.speed 
+	local dt = deltaTime
+	
 	libManager.callEvent('onTick', dt)
 	libManager.callEvent('onTickEnd', dt)
 	
