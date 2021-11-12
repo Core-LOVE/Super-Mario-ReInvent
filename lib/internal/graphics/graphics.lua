@@ -178,6 +178,19 @@ function Graphics.circle(t)
 	return t
 end
 
+function Graphics.polygon(t)
+	local t = addToCache(t)
+
+	t.mode = t.mode or 'fill'
+	
+	t.lineWidth = t.lineWidth or 1
+	t.smooth = t.smooth or false
+	
+	t.type = 'polygon'
+	
+	return t
+end
+
 do
 	local function sort(a, b)
 		return (a.priority < b.priority)
@@ -239,6 +252,27 @@ do
 		love.graphics.setLineWidth(v.lineWidth)
 		
 		love.graphics.circle(v.mode, v.x + x, v.y + y, v.radius)
+		
+		love.graphics.setLineWidth(1)
+		love.graphics.setLineStyle('rough')
+	end
+	
+	render.polygon = function(v, x, y)
+		for amount = 1, #v do
+			local num = amount % 3
+			local val = v[amount]
+			
+			if num == 1 then
+				val = val + x
+			else
+				val = val + y
+			end
+		end
+		
+		love.graphics.setLineStyle((v.smooth and 'smooth') or 'rough')
+		love.graphics.setLineWidth(v.lineWidth)
+		
+		love.graphics.polygon(v.mode, v)
 		
 		love.graphics.setLineWidth(1)
 		love.graphics.setLineStyle('rough')

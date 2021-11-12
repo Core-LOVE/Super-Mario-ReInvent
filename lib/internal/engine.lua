@@ -1,5 +1,5 @@
 local Engine = {}
-Engine.FPSCap = 65
+Engine.FPSCap = 64.1
 
 Engine.speed = 1
 
