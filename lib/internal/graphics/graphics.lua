@@ -314,7 +314,7 @@ do
 	local tablesort = table.sort
 	local min = math.min
 	
-	function Graphics.onDraw()
+	function Graphics.onDrawInternal()
 		tablesort(queqe, sort)
 		
 		-- push:start()
@@ -378,7 +378,7 @@ end
 function Graphics.onInit()
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	
-	registerFunction(Graphics, 'onDraw')
+	registerFunction(Graphics, 'onDrawInternal')
 	registerFunction(Graphics, 'onWindowResize')
 end
 

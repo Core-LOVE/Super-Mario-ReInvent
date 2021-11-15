@@ -31,8 +31,10 @@ do
 		local cx = (cam.x - section.x) * layer.paralX
 		local cy = (cam.y - section.y) * layer.paralY
 		
-		layer.realSX = layer.realSX + layer.speedX
-		layer.realSY = layer.realSY + layer.speedY
+		local dt = deltaTime
+		
+		layer.realSX = layer.realSX + (layer.speedX * dt)
+		layer.realSY = layer.realSY + (layer.speedY * dt)
 		
 		Graphics.draw{
 			image = img,

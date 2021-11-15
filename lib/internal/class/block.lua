@@ -64,14 +64,14 @@ function Block:render(args)
 	}
 end
 
-function Block.onDraw()
+function Block.onDrawInternal()
 	for k,v in ipairs(Block) do
 		v:render()
 	end
 end
 
 function Block.onInit()
-	registerFunction(Block, 'onDraw')
+	registerFunction(Block, 'onDrawInternal')
 end
 
 registerBlockFunction = libManager.defineRegistering(Block, 'id', 'Block')

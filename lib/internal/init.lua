@@ -54,20 +54,22 @@ Block.spawn(299, 256 + 32, 256 - 32)
 
 function onGlobalDraw()
 	libManager.callEvent('onDraw')
-	libManager.callEvent('onDrawEnd')
+	libManager.callEvent('onDrawInternal')
 	
 	for k,v in ipairs(Camera) do
 		libManager.callEvent('onCameraDraw', v)
 		libManager.callEvent('onHUDDraw', v)
 	end
+	
+	libManager.callEvent('onDrawEnd')
 end
  
 function onGlobalTick(dt)
 	deltaTime = (dt * Engine.FPSCap) * Engine.speed 
-	local dt = deltaTime
-	
-	libManager.callEvent('onTick', dt)
-	libManager.callEvent('onTickEnd', dt)
+
+	libManager.callEvent('onTick')
+	libManager.callEvent('onTickInternal')
+	libManager.callEvent('onTickEnd')
 	
 	local s = 3
 	

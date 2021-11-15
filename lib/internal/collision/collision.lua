@@ -69,6 +69,7 @@ do
 		local objBox = HC.rectangle(obj.x, obj.y, obj.width, obj.height)
 		
 		local col, dx, dy = objBox:collidesWith(blockBox)
+		
 		if col then
 			obj.x = obj.x + dx
 			obj.y = obj.y + dy

@@ -236,13 +236,15 @@ function NPC:onPhysics(dt)
 	Collision.update(v)
 end
 
-function NPC.onDraw()
+function NPC.onDrawInternal()
 	for k,v in ipairs(NPC) do
 		v:render()
 	end
 end
 
-function NPC.onTick(dt)
+function NPC.onTickInternal()
+	local dt = deltaTime
+	
 	for k,v in ipairs(NPC) do
 		animation(v, dt)
 		v:onPhysics(dt)
@@ -250,8 +252,8 @@ function NPC.onTick(dt)
 end
 
 function NPC.onInit()
-	registerFunction(NPC, 'onTick')
-	registerFunction(NPC, 'onDraw')
+	registerFunction(NPC, 'onTickInternal')
+	registerFunction(NPC, 'onDrawInternal')
 end
 
 registerNPCFunction = libManager.defineRegistering(NPC, 'id', 'NPC')
