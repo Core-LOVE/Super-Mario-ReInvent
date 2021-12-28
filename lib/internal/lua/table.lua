@@ -238,10 +238,6 @@ function table.flatten(t)
 end
 --TOTALLY
 
-function table.get(t, k)
-	return t[k]
-end
-
 function table.irandom(t, l, r)
 	return t[random(l or 1, r or #t)]
 end
@@ -263,3 +259,81 @@ function table.random(t, l, r)
 	
     return choice 
 end
+
+function table.get(t, arg2)
+	local ret = {}
+		
+	if type(arg2) == 'function' then
+		for k,v in pairs(t) do
+			if arg2(v) then
+				ret[#ret + 1] = v
+			end
+		end
+	elseif type(arg2) == 'table' then
+		for k,v in pairs(t) do
+			local condition = false
+			
+			for k2,v2 in pairs(arg2) do
+				if v[k2] == v2 then
+					condition = true
+				else
+					condition = false
+				end
+			end
+			
+			if condition then
+				ret[#ret + 1] = v
+			end
+		end
+	else
+		for k,v in pairs(t) do
+			ret[#ret + 1] = v
+		end
+	end
+	
+	return ret
+end
+
+function table.iget(t, arg2)
+	local ret = {}
+		
+	if type(arg2) == 'function' then
+		for k,v in ipairs(t) do
+			if arg2(v) then
+				ret[#ret + 1] = v
+			end
+		end
+	elseif type(arg2) == 'table' then
+		for k,v in ipairs(t) do
+			local condition = false
+			
+			for k2,v2 in pairs(arg2) do
+				if v[k2] == v2 then
+					condition = true
+				else
+					condition = false
+				end
+			end
+			
+			if condition then
+				ret[#ret + 1] = v
+			end
+		end
+	else
+		for k,v in ipairs(t) do
+			ret[#ret + 1] = v
+		end
+	end
+	
+	return ret
+end
+
+-- local function iterate(t, args, i)
+	-- while (i <= args[1]) do
+		-- local v = t[i]
+	-- end
+-- end
+
+-- function table.iterate(t, arg2)
+
+-- end

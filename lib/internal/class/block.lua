@@ -61,6 +61,7 @@ function Block:render(args)
 
 		scene = (args.scene == nil and true) or args.scene,
 		targetCamera = args.targetCamera or 0,
+		priority = PRIORITY.BLOCK,
 	}
 end
 

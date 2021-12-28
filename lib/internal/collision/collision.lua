@@ -54,17 +54,25 @@ do
 		}
 	end
 	
+	slopes.floor.right = function(vx, vy, vw, vh)
+		return toCoords{
+			{x = vx + vw, y = vy + vh},
+			{x = vx, y = vy + vh},
+			{x = vx + vw, y = vy},
+		}
+	end	
+	
 	Collision.registerSystem('default', function(obj, block)
-		local blockBox = HC.rectangle(block.x, block.y, block.width, block.height)
-		-- local blockBox
+		-- local blockBox = HC.rectangle(block.x, block.y, block.width, block.height)
+		local blockBox
 		
-		-- local vside = 'floor'
-		-- local hside = 'left'
-		-- local slope = slopes[vside][hside](block.x, block.y, block.width, block.height)
+		local vside = 'floor'
+		local hside = 'left'
+		local slope = slopes[vside][hside](block.x, block.y, block.width, block.height)
 		
-		-- Graphics.polygon(slope)
+		Graphics.polygon(slope)
 		
-		-- blockBox = HC.polygon(obj.x, unpack(slope))
+		blockBox = HC.polygon(unpack(slope))
 		
 		local objBox = HC.rectangle(obj.x, obj.y, obj.width, obj.height)
 		
@@ -90,6 +98,8 @@ do
 		
 		HC.remove(blockBox)
 		HC.remove(objBox)
+		blockBox = nil
+		objBox = nil
 		collectgarbage()
 	end)
 end

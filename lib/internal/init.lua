@@ -16,8 +16,6 @@ require 'lua/string'
 require 'lua/coroutine'
 require 'lua/thread'
 require 'lua/channel'
-require 'lua/functions'
-require 'lua/global'
 
 --parser
 ini = require 'parser/ini'
@@ -44,10 +42,10 @@ Camera = require("class/camera")
 NPC = require("class/npc")
 Block = require("class/block")
 
-NPC.spawn(1, 0,0)
+NPC.spawn(1, 208,0)
 
 for x = 0, 256, 32 do
-	Block.spawn(1, x, 256)
+	Block.spawn(305, x, 512 - x)
 end
 
 Block.spawn(299, 256 + 32, 256 - 32)
