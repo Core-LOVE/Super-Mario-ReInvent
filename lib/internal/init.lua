@@ -16,6 +16,7 @@ require 'lua/string'
 require 'lua/coroutine'
 require 'lua/thread'
 require 'lua/channel'
+require 'lua/physics'
 
 --parser
 ini = require 'parser/ini'
@@ -44,8 +45,8 @@ Block = require("class/block")
 
 NPC.spawn(1, 208,0)
 
-for x = 0, 256, 32 do
-	Block.spawn(305, x, 512 - x)
+for x = 0, 512, 32 do
+	Block.spawn(305, x, 512)
 end
 
 Block.spawn(299, 256 + 32, 256 - 32)
