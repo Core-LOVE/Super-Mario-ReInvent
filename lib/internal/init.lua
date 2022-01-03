@@ -37,56 +37,51 @@ Collision = require('collision/collision')
 Background = require("class/background")
 Section = require("class/section")
 Section.spawn(0, 0, 1600, 1200)
+Player = require("class/player")
 Camera = require("class/camera")
 
 -- Camera.type = CAMTYPE.VERT1 --purely for testing purposes
 NPC = require("class/npc")
 Block = require("class/block")
 
-NPC.spawn(1, 208,0)
+-- NPC.spawn(1, 208,0)
 
 for x = 0, 512, 32 do
-	Block.spawn(305, x, 512)
+	Block.spawn(1, x, 512)
 end
 
-Block.spawn(299, 256 + 32, 256 - 32)
+Block.spawn(305, 512 + 32, 512 - 32)
+Block.spawn(305, 512 + 64, 512 - 64)
+
+Player.spawn(0, 0)
 
 function onGlobalDraw()
 	libManager.callEvent('onDraw')
-	libManager.callEvent('onDrawInternal')
 	
 	for k,v in ipairs(Camera) do
 		libManager.callEvent('onCameraDraw', v)
 		libManager.callEvent('onHUDDraw', v)
 	end
 	
+	libManager.callEvent('onDrawInternal')
 	libManager.callEvent('onDrawEnd')
 end
  
 function onGlobalTick(dt)
 	deltaTime = (dt * Engine.FPSCap) * Engine.speed 
 
+	libManager.callEvent('onInputUpdateInternal')
+	libManager.callEvent('onInputUpdate')
+	
 	libManager.callEvent('onTick')
 	libManager.callEvent('onTickInternal')
 	libManager.callEvent('onTickEnd')
 	
-	local s = 3
-	
-	if love.keyboard.isDown('right') then
-		camera.x = camera.x + (s * dt)
-	elseif love.keyboard.isDown('left') then
-		camera.x = camera.x - (s * dt)
-	end
-	
-	if love.keyboard.isDown('up') then
-		camera.y = camera.y - (s * dt)
-	elseif love.keyboard.isDown('down') then
-		camera.y = camera.y + (s * dt)
-	end
-	
 	for k,v in ipairs(Camera) do
 		libManager.callEvent('onCameraUpdate', v)
 	end
+	
+	return true
 end
 
 function love.resize(w, h)

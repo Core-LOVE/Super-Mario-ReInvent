@@ -25,17 +25,21 @@ function love.run()
 		if love.timer then dt = love.timer.step() end
 
 		-- Call update and draw
-		if onGlobalTick then onGlobalTick(dt) end -- will pass 0 if love.timer is disabled
+		local draw = false
+		
+		if onGlobalTick then draw = onGlobalTick(dt) end -- will pass 0 if love.timer is disabled
 
-		if love.graphics and love.graphics.isActive() then
-			love.graphics.origin()
-			love.graphics.clear(love.graphics.getBackgroundColor())
+		if draw then
+			if love.graphics and love.graphics.isActive() then
+				love.graphics.origin()
+				love.graphics.clear(love.graphics.getBackgroundColor())
 
-			if onGlobalDraw then onGlobalDraw() end
+				if onGlobalDraw then onGlobalDraw() end
 
-			love.graphics.present()
+				love.graphics.present()
+			end
 		end
-
+		
 		if love.timer then 
 			love.timer.sleep(0.001)
 		end

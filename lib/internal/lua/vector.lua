@@ -159,6 +159,8 @@ function vector:norm()
   return self
 end
 
+vector.normalize = vector.norm
+
 -- limit the vector to a certain amount
 function vector:limit(max)
   assert(type(max) == 'number', "limit: wrong argument type (expected <number>)")

@@ -90,7 +90,7 @@ function NPC.spawn(id, x, y, sect_num, respawn, centred)
 	v.frame = 0
 	v.frameTimer = 0
 	
-	v.data = {}
+	v.data = {settings = {}}
 	
 	v.params = {
 		opacity = 1,
@@ -99,9 +99,18 @@ function NPC.spawn(id, x, y, sect_num, respawn, centred)
 	}
 	
 	NPC.loadLua(v.id)
-	
 	setmetatable(v, {__index = NPC})
-	NPC[#NPC + 1] = v
+	
+	do
+		local event = {cancelled = false}
+	
+		libManager.callEvent('onNPCSpawn', event, v)
+	
+		if not event.cancelled then
+			NPC[#NPC + 1] = v
+		end
+	end
+	
 	return v
 end
 
@@ -225,13 +234,10 @@ function NPC:onPhysics(dt)
 	local cfg = NPC.config[v.id]
 	
 	if not cfg.nogravity then
-		v.speedY = min(v.speedY + (v.gravity or cfg.gravity or Defines.npc_grav), v.maxgravity or cfg.maxgravity or Defines.gravity)
+		v.speedY = min(v.speedY + (v.gravity or cfg.gravity or Defines.npc_grav), v.maxSpeedY or cfg.maxSpeedY or Defines.gravity)
 	end
 	
 	v.speedX = 1 * v.direction
-	
-	v.x = v.x + (v.speedX * dt)
-	v.y = v.y + (v.speedY * dt)
 	
 	Collision.update(v)
 end

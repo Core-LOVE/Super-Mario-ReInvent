@@ -66,3 +66,7 @@ function math.angle(x1,y1, x2,y2) return atan2(y2-y1, x2-x1) end
 
 -- Returns the closest multiple of 'size' (defaulting to 10).
 function math.multiple(n, size) size = size or 10 return math.round(n/size)*size end
+
+function math.tan2(a)
+	return math.cos(a), math.sin(a)
+end

@@ -2,6 +2,10 @@ local HC = require 'collision/HC/init'
 
 physics = {}
 
+physics.world = function(...)
+	return HC(...)
+end
+
 physics.registerShape = HC.register
 
 physics.point = HC.point
@@ -20,14 +24,8 @@ physics.collisions = HC.collisions
 
 physics.unpack = function(self)
 	local self = self._polygon
-	local v = {}
-	
-	for i = 1,#self.vertices do
-		v[2*i-1] = self.vertices[i].x
-		v[2*i]   = self.vertices[i].y
-	end
-	
-	return unpack(v)
+
+	return self:unpack()
 end
 
 physics.polygon = function(x, y, tris)
@@ -40,13 +38,27 @@ physics.polygon = function(x, y, tris)
 end
 
 physics.slope = function(x, y, w, h)
+	local x, y, w, h = x, y, w, h
+	
+	if w < 0 then
+		x = x - w
+	end
+	
+	if h < 0 then
+		y = y - h
+	end
+	
 	return physics.polygon(x, y, {
-	w, 0, 
-	0, h, 
-	w,h
+		w, 0, 
+		0, h, 
+		w, h
 	})
 end
 
-physics.triangle = function(x1, y1, x2, y2, x3, y3)
-
+physics.triangle = function(x, y, w, h)
+	return physics.polygon(x, y, {
+		w * 0.5, 0, 
+		0, h, 
+		w, h
+	})
 end

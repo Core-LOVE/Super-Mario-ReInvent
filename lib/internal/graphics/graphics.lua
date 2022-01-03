@@ -322,27 +322,26 @@ do
 		for k = 1, #queqe do
 			local v = queqe[k]
 			
-			love.graphics.setColor(v.color)
-			love.graphics.setBlendMode(v.blendMode, v.alphaMode)
-			
-			if not v.scene then
-				render[v.type](v, 0, 0)
-			else
-				if not Camera then return end
+			love.graphics.push()
+				love.graphics.setColor(v.color)
+				love.graphics.setBlendMode(v.blendMode, v.alphaMode)
 				
-				if v.targetCamera == 0 then
-					for _,c in ipairs(Camera) do
+				if not v.scene then
+					render[v.type](v, 0, 0)
+				else
+					if not Camera then return end
+					
+					if v.targetCamera == 0 then
+						for _,c in ipairs(Camera) do
+							renderToCamera(c, v)
+						end
+					else
+						local c = Camera[v.targetCamera]
+						
 						renderToCamera(c, v)
 					end
-				else
-					local c = Camera[v.targetCamera]
-					
-					renderToCamera(c, v)
 				end
-			end
-			
-			love.graphics.setBlendMode('alpha')
-			love.graphics.setColor(1,1,1,1)
+			love.graphics.pop()
 		end
 		-- push:finish()
 		

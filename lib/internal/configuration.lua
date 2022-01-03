@@ -7,7 +7,7 @@ return function(name, fields)
 		local fields = fields or {}
 		
 		local filename = File.exists(name .. '-' .. ind .. '.txt', {
-			'config/npc/',
+			'config/' .. name .. '/',
 		})
 		
 		if filename then
