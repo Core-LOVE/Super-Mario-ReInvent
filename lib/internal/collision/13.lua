@@ -44,43 +44,66 @@ local function slopeCollide(obj, block)
 
 end
 
-local function collideCheck(obj, block)
-	local cfg = Block.config[block.id]
+local function collideCheck(v, solid)
+	local cfg = Block.config[solid.id]
 	
-	if not check(obj, block) then return end
+	print(checkSide(v, solid))
 	
 	if cfg.floorslope ~= 0 or cfg.ceilingslope ~= 0 then
-		return slopeCollide(obj, block)
+		return slopeCollide(v, solid)
 	end
 	
-	local side = checkSide(obj, block)
+	local side = checkSide(v, solid)
 	
-	-- collides stuff
+	-- Effects
+	if side == COLLISION_SIDE_LEFT or side == COLLISION_SIDE_RIGHT then
+		if vType == "NPC" then
+			v.turnAround = true
+		else
+			v.speedX = 0
+		end
+	elseif side == COLLISION_SIDE_TOP or side == COLLISION_SIDE_BOTTOM then
+		-- if solidData.collidingSlope == 0 then
+			v.speedY = 0
+		-- else
+			-- v.speedY = 1
+		-- end
+
+		if vType == "Player" then
+			v.jumpForce = 0
+		end
+	end
+
+	if side == COLLISION_SIDE_BOTTOM and vType == "Player" then
+		-- SFX.play(3)
+	end
+
+
+	-- Ejection
 	if side == COLLISION_SIDE_BOTTOM then
-		obj.y = block.y - obj.height
-		obj.collidesBlockBottom = true
-	elseif side == COLLISION_SIDE_TOP then
-		obj.y = block.y + block.height
-		obj.collidesBlockTop = true
-	elseif side == COLLISION_SIDE_LEFT then
-		obj.x = block.x + block.width
-		obj.collidesBlockLeft = true
+		if slopeEjectionPosition == nil then
+			v.y = solid.y-v.height
+		else
+			v.y = slopeEjectionPosition
+			v.collidingSlope = solid
+		end
+
+		v.collidesBlockBottom = true
 	elseif side == COLLISION_SIDE_RIGHT then
-		obj.x = block.x + block.width
-		obj.collidesBlockRight = true
-	end
-	
-	if side ~= 3 then
-		print(side)
-	end
-	
-	--effects...
-	if obj.collidesBlockBottom then
-		obj.speedY = 0
-	end
-	
-	if obj.collidesBlockTop then
-		obj.speedY = 0
+		v.x = solid.x+solid.width
+		v.collidesBlockLeft = true
+	elseif side == COLLISION_SIDE_BOTTOM then
+		if slopeEjectionPosition == nil then
+			v.y = solid.y+solid.height
+		else
+			v.y = slopeEjectionPosition
+			v.collidingSlope = solid
+		end
+
+		v.collidesBlockTop = true
+	elseif side == COLLISION_SIDE_LEFT then
+		v.x = solid.x-v.width
+		v.collidesBlockRight = true
 	end
 end
 
@@ -98,8 +121,8 @@ sus.update = function(obj)
 		
 	local dt = 1
 
-    obj.x = obj.x + (obj.speedX * dt)
-	obj.y = obj.y + (obj.speedY * dt)
+    obj.x = obj.x + (obj.speedX)
+	obj.y = obj.y + (obj.speedY)
 
 	for _,block in Block.iterateIntersecting(obj.x, obj.y, obj.x + obj.width, obj.y + obj.height) do
 		if not Block.config[block.id].passthrough then

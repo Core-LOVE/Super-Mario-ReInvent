@@ -41,12 +41,6 @@ function string.random(len, t)
 	return str
 end
 
---TOTALLY DIDN'T TAKE IT FROM SMBX2
-function string.trim(s)
-	return stringgsub(s, "^%s*(.-)%s*$", "%1")
-end
----
-
 function string.explode(str, div)
     assert(type(str) == "string" and type(div) == "string", "invalid arguments")
     local o = {}

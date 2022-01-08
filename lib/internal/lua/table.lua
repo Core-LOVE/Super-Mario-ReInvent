@@ -94,24 +94,13 @@ function table.ideepmerge(t1, t2)
 	return nt
 end
 
---I TOTALLY DIDN'T TAKE IT FROM SMBX2............................
-function table.ifindlast(t, val)
-	for i = #t,1,-1 do
-		if(t[i] == val) then
-			return i;
+function table.find(t, val)
+	for k,v in pairs(t) do
+		if(v == val) then
+			return k;
 		end
 	end
 	return nil;
-end
-
-function table.findlast(t, val)
-	local lst = nil;
-	for k,v in pairs(t) do
-		if(v == val) then
-			lst = k;
-		end
-	end
-	return lst;
 end
 
 function table.ifind(t, val)
@@ -123,20 +112,11 @@ function table.ifind(t, val)
 	return nil;
 end
 
-function table.find(t, val)
-	for k,v in pairs(t) do
-		if(v == val) then
-			return k;
-		end
-	end
-	return nil;
-end
-
 local tableinsert = table.insert
 
-function table.ifindall(t, val)
+function table.findall(t, val)
 	local rt = {};
-	for k,v in ipairs(t) do
+	for k,v in pairs(t) do
 		if(v == val) then
 			tableinsert(rt,k);
 		end
@@ -144,9 +124,9 @@ function table.ifindall(t, val)
 	return rt;
 end
 
-function table.findall(t, val)
+function table.ifindall(t, val)
 	local rt = {};
-	for k,v in pairs(t) do
+	for k,v in ipairs(t) do
 		if(v == val) then
 			tableinsert(rt,k);
 		end
@@ -164,14 +144,6 @@ end
 
 local random = math.random
 	
-function table.ishuffle(t)
-	for i=#t,2,-1 do 
-		local j = random(1,i)
-		t[i], t[j] = t[j], t[i]
-	end
-	return t
-end
-
 function table.map(t)
 	local t2 = {};
 	for _,v in ipairs(t) do
@@ -188,29 +160,6 @@ function table.unmap(t)
 	return t2;
 end
 
-function table.join(...)
-	local ts = {...};
-	local t = {};
-	local ct = #ts;
-	for i=ct,1,-1 do
-		for k,v in pairs(ts[i]) do
-			t[k] = v;
-		end
-	end
-	return t;
-end
-
-function table.append(...)
-	local ts = {...}
-	local t = {};
-	for _,t1 in ipairs(ts) do
-		for _,v in ipairs(t1) do
-			tableinsert(t,v);
-		end
-	end
-	return t;
-end
-
 function table.reverse(t)
 	local len = 0
 	for k,_ in ipairs(t) do
@@ -222,21 +171,6 @@ function table.reverse(t)
 	end
 	return rt
 end
-
-function table.flatten(t)
-	local t2 = {};
-	for _,v in ipairs(t) do
-		if(pcall(ipairs(v))) then
-			for _,v2 in ipairs(v) do
-				tableinsert(t2, v2);
-			end
-		else
-			tableinsert(t2, v);
-		end
-	end
-	return t2;
-end
---TOTALLY
 
 function table.irandom(t, l, r)
 	return t[random(l or 1, r or #t)]

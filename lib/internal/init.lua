@@ -5,18 +5,20 @@ fs = lovefs()
 --filesystem
 File = require('lib/internal/filesystem/file')
 
+--lua additions
+vector = require 'lua/vector'
+require 'lua/thread'
+require 'lua/channel'
+require 'lua/physics'
+
 --lua
 utf8 = rawrequire 'utf8'
 bit = rawrequire 'bit'
 jit = rawrequire 'jit'
-vector = require 'lua/vector'
 require 'lua/table'
 require 'lua/math'
 require 'lua/string'
 require 'lua/coroutine'
-require 'lua/thread'
-require 'lua/channel'
-require 'lua/physics'
 
 --parser
 ini = require 'parser/ini'
@@ -25,6 +27,9 @@ txt = require 'parser/txt'
 --important
 libManager = require('internal/libManager')
 
+--loadscreen stuff
+loadscreen = require 'loadscreen'
+
 --engine
 require 'run'
 Engine = require('engine')
@@ -32,6 +37,7 @@ Defines = require('defines')
 Graphics = require('graphics/graphics')
 Sprite = require('graphics/sprite')
 Collision = require('collision/collision')
+-- Collision.setSystem("classic")
 
 --classes and etc
 Background = require("class/background")
@@ -47,6 +53,8 @@ Block = require("class/block")
 -- NPC.spawn(1, 208,0)
 
 for x = 0, 512, 32 do
+	print(x)
+	
 	Block.spawn(1, x, 512)
 end
 
@@ -54,6 +62,11 @@ Block.spawn(305, 512 + 32, 512 - 32)
 Block.spawn(305, 512 + 64, 512 - 64)
 
 Player.spawn(0, 0)
+
+function onGlobalLoad()
+	libManager.callEvent('onLoad')
+	libManager.callEvent('onStart')
+end
 
 function onGlobalDraw()
 	libManager.callEvent('onDraw')

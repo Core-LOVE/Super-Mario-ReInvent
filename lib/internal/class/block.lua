@@ -44,7 +44,7 @@ Block.bumped = {}
 
 function Block.spawn(id, x, y)
 	local v = {}
-	
+
 	v.idx = #Block + 1
 	v.id = id
 	v.x = x

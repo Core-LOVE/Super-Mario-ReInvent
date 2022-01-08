@@ -38,7 +38,7 @@ end
 local function collideCheck(obj, block)
 	local blockBox
 	local objBox
-	
+
 	local blockCfg = Block.config[block.id]
 	
 	if blockCfg.floorslope ~= 0 or blockCfg.ceilingslope ~= 0 then
@@ -87,8 +87,6 @@ local function collideCheck(obj, block)
 	
 	if collides then
 		onCollide(vector(dx, dy), obj, block)
-
-		collectgarbage()
 	end
 	
 	physics.remove(blockBox)
@@ -96,8 +94,6 @@ local function collideCheck(obj, block)
 		
 	blockBox = nil
 	objBox = nil
-
-	collectgarbage()
 end
 
 default.update = function(obj)
@@ -122,6 +118,8 @@ default.update = function(obj)
 			collideCheck(obj, block)
 		end
 	end
+	
+	collectgarbage()
 end
 
 return default
