@@ -1,0 +1,3 @@
+local npc = {}
+
+return npc
